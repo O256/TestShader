@@ -1,12 +1,12 @@
 Shader "Hidden/Hologram" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _HologramStripesAmount ("Stripes Amount", Range(0, 1)) = 0.1 //ÌõÎÆÊıÁ¿
-        _HologramStripesSpeed ("Stripes Speed", Range(-20, 20)) = 4.5 //ÌõÎÆÒÆ¶¯ËÙ¶È
-        _HologramMinAlpha ("Min Alpha", Range(0, 1)) = 0.1 //×îĞ¡µÄalphaÖµ
-        _HologramMaxAlpha ("Max Alpha", Range(0, 1)) = 0.75 //×î´óµÄalphaÖµ
-        _HologramStripeColor ("Stripes Color", Color) = (0, 1, 1, 1) //ÌõÎÆÑÕÉ«
-        _HologramBlend ("Hologram Blend", Range(0, 1)) = 1 //ÑÕÉ«»ìºÏ³Ì¶È
+        _HologramStripesAmount ("Stripes Amount", Range(0, 1)) = 0.1 //æ¡çº¹æ•°é‡
+        _HologramStripesSpeed ("Stripes Speed", Range(-20, 20)) = 4.5 //æ¡çº¹ç§»åŠ¨é€Ÿåº¦
+        _HologramMinAlpha ("Min Alpha", Range(0, 1)) = 0.1 //æœ€å°çš„alphaå€¼
+        _HologramMaxAlpha ("Max Alpha", Range(0, 1)) = 0.75 //æœ€å¤§çš„alphaå€¼
+        _HologramStripeColor ("Stripes Color", Color) = (0, 1, 1, 1) //æ¡çº¹é¢œè‰²
+        _HologramBlend ("Hologram Blend", Range(0, 1)) = 1 //é¢œè‰²æ··åˆç¨‹åº¦
 
     }
     SubShader {
@@ -34,7 +34,7 @@ Shader "Hidden/Hologram" {
                 float4 vertex : SV_POSITION;
             };
 
-            //ÓÃÓÚ½«Ò»¸ö·¶Î§ÄÚµÄÖµÓ³Éäµ½ÁíÒ»¸ö·¶Î§ÄÚ
+            //ç”¨äºå°†ä¸€ä¸ªèŒƒå›´å†…çš„å€¼æ˜ å°„åˆ°å¦ä¸€ä¸ªèŒƒå›´å†…
             half RemapFloat(half inValue, half inMin, half inMax, half outMin, half outMax) {
                 return outMin + (inValue - inMin) * (outMax - outMin) / (inMax - inMin);
             }
@@ -50,16 +50,16 @@ Shader "Hidden/Hologram" {
                 fixed4 col = tex2D(_MainTex, i.uv);
 
                 half totalHologram = _HologramStripesAmount;
-                half hologramYCoord = ((i.uv.y + (((_Time.x) % 1) * _HologramStripesSpeed)) % totalHologram) / totalHologram;//¼ÆËãÈ«Ï¢ÌõÎÆµÄY×ø±êÎ»ÖÃ
-                hologramYCoord = abs(hologramYCoord);//È¡È«Ï¢ÌõÎÆµÄ¾ø¶ÔÖµ£¬È·±£Y×ø±êÔÚÕıÊı·¶Î§ÄÚ
-                half alpha = RemapFloat(saturate(hologramYCoord), 0.0, 1.0, _HologramMinAlpha, saturate(_HologramMaxAlpha));//¸ù¾İÌõÎÆµÄY×ø±ê¼ÆËãalphaÖµ
-                half hologramMask = max(sign(-hologramYCoord), 0.0);//¼ÆËãÒ»¸öÓÃÓÚ¿ØÖÆÈ«Ï¢Ğ§¹ûµÄÏÔÊ¾·¶Î§µÄÖµ
+                half hologramYCoord = ((i.uv.y + (((_Time.x) % 1) * _HologramStripesSpeed)) % totalHologram) / totalHologram;//è®¡ç®—å…¨æ¯æ¡çº¹çš„Yåæ ‡ä½ç½®
+                hologramYCoord = abs(hologramYCoord);//å–å…¨æ¯æ¡çº¹çš„ç»å¯¹å€¼ï¼Œç¡®ä¿Yåæ ‡åœ¨æ­£æ•°èŒƒå›´å†…
+                half alpha = RemapFloat(saturate(hologramYCoord), 0.0, 1.0, _HologramMinAlpha, saturate(_HologramMaxAlpha));//æ ¹æ®æ¡çº¹çš„Yåæ ‡è®¡ç®—alphaå€¼
+                half hologramMask = max(sign(-hologramYCoord), 0.0);//è®¡ç®—ä¸€ä¸ªç”¨äºæ§åˆ¶å…¨æ¯æ•ˆæœçš„æ˜¾ç¤ºèŒƒå›´çš„å€¼
                 half4 hologramResult = col;
-                hologramResult.a *= lerp(alpha, 1, hologramMask);//¸ù¾İ¼ÆËãµÄalphaÖµºÍÑÚÂëÖµ£¬µ÷ÕûhologramResultµÄalphaÍ¨µÀÖµ
-                hologramResult.rgb *= max(1, _HologramMaxAlpha * max(sign(hologramYCoord), 0.0));//¸ù¾İÌõÎÆµÄY×ø±êÎ»ÖÃ£¬µ÷ÕûhologramResultµÄRGBÑÕÉ«Öµ
-                hologramMask = 1 - step(0.01, hologramMask);//¸ù¾İÑÚÂëÖµ£¬¼ÆËãÒ»¸ö·´ÏòÑÚÂë¡£Èç¹ûÑÚÂëÖµĞ¡ÓÚ0.01£¬Ôò½«ÆäÉèÖÃÎª1£¬·ñÔòÉèÖÃÎª0
-                hologramResult.rgb += hologramMask * _HologramStripeColor * col.a;//¸ù¾İ·´ÏòÑÚÂë£¬Ìí¼ÓÈ«Ï¢ÌõÎÆµÄÑÕÉ«
-                col = lerp(col, hologramResult, _HologramBlend);//½«Ô­Ê¼ÑÕÉ«colºÍ¾­¹ıÈ«Ï¢Ğ§¹û´¦ÀíºóµÄÑÕÉ«hologramResult½øĞĞ»ìºÏ
+                hologramResult.a *= lerp(alpha, 1, hologramMask);//æ ¹æ®è®¡ç®—çš„alphaå€¼å’Œæ©ç å€¼ï¼Œè°ƒæ•´hologramResultçš„alphaé€šé“å€¼
+                hologramResult.rgb *= max(1, _HologramMaxAlpha * max(sign(hologramYCoord), 0.0));//æ ¹æ®æ¡çº¹çš„Yåæ ‡ä½ç½®ï¼Œè°ƒæ•´hologramResultçš„RGBé¢œè‰²å€¼
+                hologramMask = 1 - step(0.01, hologramMask);//æ ¹æ®æ©ç å€¼ï¼Œè®¡ç®—ä¸€ä¸ªåå‘æ©ç ã€‚å¦‚æœæ©ç å€¼å°äº0.01ï¼Œåˆ™å°†å…¶è®¾ç½®ä¸º1ï¼Œå¦åˆ™è®¾ç½®ä¸º0
+                hologramResult.rgb += hologramMask * _HologramStripeColor * col.a;//æ ¹æ®åå‘æ©ç ï¼Œæ·»åŠ å…¨æ¯æ¡çº¹çš„é¢œè‰²
+                col = lerp(col, hologramResult, _HologramBlend);//å°†åŸå§‹é¢œè‰²colå’Œç»è¿‡å…¨æ¯æ•ˆæœå¤„ç†åçš„é¢œè‰²hologramResultè¿›è¡Œæ··åˆ
 
                 return col;
             }

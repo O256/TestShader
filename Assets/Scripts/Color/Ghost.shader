@@ -1,9 +1,9 @@
 Shader "Hidden/Ghost" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _GhostColorBoost ("Ghost Color Boost", Range(0, 5)) = 1 //ÓÄÁé»¯ºóµÄÁÁ¶È
-        _GhostTransparency ("Ghost Transparency", Range(0, 1)) = 0 //Í¸Ã÷¶È
-        _GhostBlend ("Ghost Blend", Range(0, 1)) = 1 // Í¸Ã÷µÄÑÕÉ«»ìºÏ³Ì¶È
+        _GhostColorBoost ("Ghost Color Boost", Range(0, 5)) = 1 //å¹½çµåŒ–åçš„äº®åº¦
+        _GhostTransparency ("Ghost Transparency", Range(0, 1)) = 0 //é€æ˜åº¦
+        _GhostBlend ("Ghost Blend", Range(0, 1)) = 1 // é€æ˜çš„é¢œè‰²æ··åˆç¨‹åº¦
 
     }
     SubShader {
@@ -40,12 +40,12 @@ Shader "Hidden/Ghost" {
             fixed4 frag(v2f i) : SV_Target {
                 fixed4 col = tex2D(_MainTex, i.uv);
 
-                half luminance = 0.3 * col.r + 0.59 * col.g + 0.11 * col.b;//¼ÆËãÁËµ±Ç°ÏñËØµÄÁÁ¶È£¨»Ò¶ÈÖµ£©³£¼ûµÄ¼ÆËã»Ò¶ÈµÄ¹«Ê½
+                half luminance = 0.3 * col.r + 0.59 * col.g + 0.11 * col.b;//è®¡ç®—äº†å½“å‰åƒç´ çš„äº®åº¦ï¼ˆç°åº¦å€¼ï¼‰å¸¸è§çš„è®¡ç®—ç°åº¦çš„å…¬å¼
                 half4 ghostResult;
-                ghostResult.a = saturate(luminance - _GhostTransparency);//¼ÆËãÁË¡°ÓÄÁéĞ§¹û¡±µÄÍ¸Ã÷¶È ´ÓÏñËØµÄÁÁ¶ÈÖĞ¼õÈ¥_GhostTransparency ²ÎÊı
-                //¼ÆËãÁË¡°ÓÄÁéĞ§¹û¡±µÄÑÕÉ«¡£Ëü½«Ô­Ê¼ÑÕÉ«ÓëÏñËØµÄÁÁ¶È¼ÓÉÏ_GhostColorBoost²ÎÊıµÄ³Ë»ıÏà³Ë£¬ÕâÑù¿ÉÒÔ¸ù¾İÏñËØµÄÁÁ¶Èµ÷ÕûÓÄÁéĞ§¹ûµÄÑÕÉ«¡£
+                ghostResult.a = saturate(luminance - _GhostTransparency);//è®¡ç®—äº†â€œå¹½çµæ•ˆæœâ€çš„é€æ˜åº¦ ä»åƒç´ çš„äº®åº¦ä¸­å‡å»_GhostTransparency å‚æ•°
+                //è®¡ç®—äº†â€œå¹½çµæ•ˆæœâ€çš„é¢œè‰²ã€‚å®ƒå°†åŸå§‹é¢œè‰²ä¸åƒç´ çš„äº®åº¦åŠ ä¸Š_GhostColorBoostå‚æ•°çš„ä¹˜ç§¯ç›¸ä¹˜ï¼Œè¿™æ ·å¯ä»¥æ ¹æ®åƒç´ çš„äº®åº¦è°ƒæ•´å¹½çµæ•ˆæœçš„é¢œè‰²ã€‚
                 ghostResult.rgb = col.rgb * (luminance + _GhostColorBoost);
-                col = lerp(col, ghostResult, _GhostBlend);//½«Ô­Ê¼ÑÕÉ«ºÍÓÄÁéĞ§¹ûµÄÑÕÉ«½øĞĞ»ìºÏ¡£»ìºÏ±ÈÀıÓÉ_GhostBlend²ÎÊı¿ØÖÆ
+                col = lerp(col, ghostResult, _GhostBlend);//å°†åŸå§‹é¢œè‰²å’Œå¹½çµæ•ˆæœçš„é¢œè‰²è¿›è¡Œæ··åˆã€‚æ··åˆæ¯”ä¾‹ç”±_GhostBlendå‚æ•°æ§åˆ¶
 
                 return col;
             }

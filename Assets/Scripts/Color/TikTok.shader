@@ -1,8 +1,8 @@
 Shader "Hidden/TikTok" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _TikTokAmount ("TikTok Amount", Range(0, 1)) = 0.5 //×óÓÒÆ«ÒÆÁ¿
-        _TikTokAlpha ("TikTok Alpha", Range(0, 1)) = 0.25 //ÖØÓ°µÄalphaÖµ
+        _TikTokAmount ("TikTok Amount", Range(0, 1)) = 0.5 //å·¦å³åç§»é‡
+        _TikTokAlpha ("TikTok Alpha", Range(0, 1)) = 0.25 //é‡å½±çš„alphaå€¼
 
     }
     SubShader {
@@ -39,14 +39,14 @@ Shader "Hidden/TikTok" {
 
             fixed4 frag(v2f i) : SV_Target {
                 fixed4 col = tex2D(_MainTex, i.uv);
-                //ÕâÀïµÄ²ÉÑùÎ»ÖÃÔÚµ±Ç°ÏñËØµÄÓÒ²à£¬ºáÏòÆ«ÒÆÁ¿Îª_TikTokAmount/10¡£_TikTokAmountÊÇÒ»¸ö²ÎÊı£¬ÓÃÓÚ¿ØÖÆÌõÎÆµÄ¿í¶È¡£
+                //è¿™é‡Œçš„é‡‡æ ·ä½ç½®åœ¨å½“å‰åƒç´ çš„å³ä¾§ï¼Œæ¨ªå‘åç§»é‡ä¸º_TikTokAmount/10ã€‚_TikTokAmountæ˜¯ä¸€ä¸ªå‚æ•°ï¼Œç”¨äºæ§åˆ¶æ¡çº¹çš„å®½åº¦ã€‚
                 half4 r = tex2D(_MainTex, i.uv + half2(_TikTokAmount / 10, 0));
-                //ÕâÀïµÄ²ÉÑùÎ»ÖÃÔÚµ±Ç°ÏñËØµÄ×ó²à£¬ºáÏòÆ«ÒÆÁ¿Îª-_TikTokAmount/10¡£
+                //è¿™é‡Œçš„é‡‡æ ·ä½ç½®åœ¨å½“å‰åƒç´ çš„å·¦ä¾§ï¼Œæ¨ªå‘åç§»é‡ä¸º-_TikTokAmount/10ã€‚
                 half4 b = tex2D(_MainTex, i.uv + half2(-_TikTokAmount / 10, 0));
-                //Ê×ÏÈ£¬½«ºìÉ«Í¨µÀ£¨r.r£©£¬ÒÔÇ¿µ÷ÓÒ²àÌõÎÆµÄºìÉ«²¿·Ö¡£
-                //ÂÌÉ«Í¨µÀ£¨col.g£©±£³Ö²»±ä¡£
-                //È»ºó£¬½«À¶É«Í¨µÀ£¨b.b£©£¬ÒÔÇ¿µ÷×ó²àÌõÎÆµÄÀ¶É«²¿·Ö¡£
-                //×îºó£¬½«µ±Ç°ÏñËØµÄalphaÖµÉèÎªÓÒ²àºÍ×ó²à²ÉÑùÏñËØµÄalphaÖµµÄ×î´óÖµ³ËÒÔ²ÎÊı_TikTokAlphaÒÔ¿ØÖÆalphaÖµ
+                //é¦–å…ˆï¼Œå°†çº¢è‰²é€šé“ï¼ˆr.rï¼‰ï¼Œä»¥å¼ºè°ƒå³ä¾§æ¡çº¹çš„çº¢è‰²éƒ¨åˆ†ã€‚
+                //ç»¿è‰²é€šé“ï¼ˆcol.gï¼‰ä¿æŒä¸å˜ã€‚
+                //ç„¶åï¼Œå°†è“è‰²é€šé“ï¼ˆb.bï¼‰ï¼Œä»¥å¼ºè°ƒå·¦ä¾§æ¡çº¹çš„è“è‰²éƒ¨åˆ†ã€‚
+                //æœ€åï¼Œå°†å½“å‰åƒç´ çš„alphaå€¼è®¾ä¸ºå³ä¾§å’Œå·¦ä¾§é‡‡æ ·åƒç´ çš„alphaå€¼çš„æœ€å¤§å€¼ä¹˜ä»¥å‚æ•°_TikTokAlphaä»¥æ§åˆ¶alphaå€¼
                 col = half4(r.r, col.g, b.b, max(max(r.a, b.a) * _TikTokAlpha, col.a));
                 return col;
             }

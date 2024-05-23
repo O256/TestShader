@@ -1,14 +1,14 @@
 Shader "Hidden/Glow" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _GlowColor ("Glow Color", Color) = (1, 1, 1, 1) //È«Éí·¢¹âµÄÑÕÉ«
-        _GlowIntensity ("GlowIntensity", Range(0, 10)) = 2 //ÎÆÀí»òÕßÑÕÉ«ÔËÓÃ²¿Î»µÄ·¢¹âµÄÇ¿¶È
-        [NoScaleOffset] _GlowTex ("GlowTexture", 2D) = "white" { }//·¢¹âÎÆÀí
+        _GlowColor ("Glow Color", Color) = (1, 1, 1, 1) //å…¨èº«å‘å…‰çš„é¢œè‰²
+        _GlowIntensity ("GlowIntensity", Range(0, 10)) = 2 //çº¹ç†æˆ–è€…é¢œè‰²è¿ç”¨éƒ¨ä½çš„å‘å…‰çš„å¼ºåº¦
+        [NoScaleOffset] _GlowTex ("GlowTexture", 2D) = "white" { }//å‘å…‰çº¹ç†
 
-        _DistortTex ("DistortionTex", 2D) = "white" { }//·¢¹âÎÆÀíÅ¤ÇúµÄÔëÉùÍ¼
-        _DistortAmount ("DistortionAmount", Range(0, 2)) = 2 //ÔëÉùÍ¼²¨¶¯µÄ´óĞ¡ÏµÊı
-        _DistortTexXSpeed ("DistortTexXSpeed", Range(-50, 50)) = 0 //ÔëÉùÍ¼²¨¶¯µÄXÖáËÙ¶È
-        _DistortTexYSpeed ("DistortTexYSpeed", Range(-50, 50)) = -5 //ÔëÉùÍ¼²¨¶¯µÄYÖáËÙ¶È
+        _DistortTex ("DistortionTex", 2D) = "white" { }//å‘å…‰çº¹ç†æ‰­æ›²çš„å™ªå£°å›¾
+        _DistortAmount ("DistortionAmount", Range(0, 2)) = 2 //å™ªå£°å›¾æ³¢åŠ¨çš„å¤§å°ç³»æ•°
+        _DistortTexXSpeed ("DistortTexXSpeed", Range(-50, 50)) = 0 //å™ªå£°å›¾æ³¢åŠ¨çš„Xè½´é€Ÿåº¦
+        _DistortTexYSpeed ("DistortTexYSpeed", Range(-50, 50)) = -5 //å™ªå£°å›¾æ³¢åŠ¨çš„Yè½´é€Ÿåº¦
 
     }
     SubShader {
@@ -48,27 +48,27 @@ Shader "Hidden/Glow" {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
-                o.uvOutDistTex = TRANSFORM_TEX(v.uv, _DistortTex);//µÃµ½_DistortTex¿Õ¼äÏÂµÄuv×ø±ê
+                o.uvOutDistTex = TRANSFORM_TEX(v.uv, _DistortTex);//å¾—åˆ°_DistortTexç©ºé—´ä¸‹çš„uvåæ ‡
                 o.color = v.color;
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target {
-                fixed4 col = tex2D(_MainTex, i.uv);//ÏÈ¶ÔÔ­±¾Í¼Æ¬µÄÎÆÀí½øĞĞ²ÉÑùµÃµ½»ù±¾µÄÑÕÉ«
+                fixed4 col = tex2D(_MainTex, i.uv);//å…ˆå¯¹åŸæœ¬å›¾ç‰‡çš„çº¹ç†è¿›è¡Œé‡‡æ ·å¾—åˆ°åŸºæœ¬çš„é¢œè‰²
 
-                i.uvOutDistTex.x += (_Time * _DistortTexXSpeed) % 1;//½«ÔëÉùÎÆÀíÍ¼ºÍÊ±¼ä³É±ÈÀı½øĞĞÒÆ¶¯
+                i.uvOutDistTex.x += (_Time * _DistortTexXSpeed) % 1;//å°†å™ªå£°çº¹ç†å›¾å’Œæ—¶é—´æˆæ¯”ä¾‹è¿›è¡Œç§»åŠ¨
                 i.uvOutDistTex.y += (_Time * _DistortTexYSpeed) % 1;
-                float outDistortAmnt = (tex2D(_DistortTex, i.uvOutDistTex).r - 0.5) * 0.2 * _DistortAmount;//Í¨¹ı²ÉÑùÔëÉùÍ¼µÄrÖµÀ´µÃµ½±äĞÎµÄ´óĞ¡²ÎÊı
+                float outDistortAmnt = (tex2D(_DistortTex, i.uvOutDistTex).r - 0.5) * 0.2 * _DistortAmount;//é€šè¿‡é‡‡æ ·å™ªå£°å›¾çš„rå€¼æ¥å¾—åˆ°å˜å½¢çš„å¤§å°å‚æ•°
                 float2 destUv = (0, 0);
-                destUv.x += outDistortAmnt;//Ãè±ß¿Õ¼äµÄxy¼ÓÉÏÕâ¸ö±äĞÎµÄ²ÎÊı£¬Ê¹Ãè±ß±äĞÎ
+                destUv.x += outDistortAmnt;//æè¾¹ç©ºé—´çš„xyåŠ ä¸Šè¿™ä¸ªå˜å½¢çš„å‚æ•°ï¼Œä½¿æè¾¹å˜å½¢
                 destUv.y += outDistortAmnt;
                 float4 noiseCol = tex2D(_DistortTex, destUv);
 
 
-                fixed4 emission = tex2D(_GlowTex, i.uv);//ÔÙ¶Ô·¢¹âÎÆÀíÍ¼²ÉÑùµÃµ½·¢¹âµÄÑÕÉ«
+                fixed4 emission = tex2D(_GlowTex, i.uv);//å†å¯¹å‘å…‰çº¹ç†å›¾é‡‡æ ·å¾—åˆ°å‘å…‰çš„é¢œè‰²
 
-                emission.rgb *= emission.a * col.a * _GlowIntensity * _GlowColor;//ÔÙ³ËÒÔ·¢¹âµÄÇ¿¶ÈºÍ·¢¹âµÄÑÕÉ«µÃµ½Ò»¸öÎÒÃÇ¿ÉÒÔÍ¨¹ıÊı¾İ¿ØÖÆµÄÑÕÉ«
-                col.rgb += emission.rgb * noiseCol;//ÔÙÈÃÔ­±¾ÑÕÉ«¼ÓÉÏ·¢¹âÑÕÉ«ÔÙ¼ÓÉÏÅ¤ÇúÑÕÉ«
+                emission.rgb *= emission.a * col.a * _GlowIntensity * _GlowColor;//å†ä¹˜ä»¥å‘å…‰çš„å¼ºåº¦å’Œå‘å…‰çš„é¢œè‰²å¾—åˆ°ä¸€ä¸ªæˆ‘ä»¬å¯ä»¥é€šè¿‡æ•°æ®æ§åˆ¶çš„é¢œè‰²
+                col.rgb += emission.rgb * noiseCol;//å†è®©åŸæœ¬é¢œè‰²åŠ ä¸Šå‘å…‰é¢œè‰²å†åŠ ä¸Šæ‰­æ›²é¢œè‰²
 
                 return col;
             }

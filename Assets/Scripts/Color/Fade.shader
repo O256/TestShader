@@ -2,10 +2,10 @@ Shader "Hidden/Fade" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
 
-        _FadeTex ("FadeTexture", 2D) = "white" { }//ÈÜ½âµÄÔëÉùÍ¼
-        _FadeAmount ("FadeAmount", Range(0, 1)) = 0 //ÈÜ½âµÄÊıÖµ
-        _FadeColor ("FadeColor", Color) = (1, 1, 0, 1) //ÈÜ½âÊ±µÄÑÕÉ«
-        _FadeBurnWidth ("Fade Burn Width", Range(0, 1)) = 0.02 //µ±ÑÕÉ«¸²¸ÇÁË¶àÉÙµÄÊ±ºò²Å¿ªÊ¼ÈÜ½â
+        _FadeTex ("FadeTexture", 2D) = "white" { }//æº¶è§£çš„å™ªå£°å›¾
+        _FadeAmount ("FadeAmount", Range(0, 1)) = 0 //æº¶è§£çš„æ•°å€¼
+        _FadeColor ("FadeColor", Color) = (1, 1, 0, 1) //æº¶è§£æ—¶çš„é¢œè‰²
+        _FadeBurnWidth ("Fade Burn Width", Range(0, 1)) = 0.02 //å½“é¢œè‰²è¦†ç›–äº†å¤šå°‘çš„æ—¶å€™æ‰å¼€å§‹æº¶è§£
 
     }
     SubShader {
@@ -42,17 +42,17 @@ Shader "Hidden/Fade" {
                 return o;
             }
 
-            fixed4 frag(v2f i) : SV_Target {
-                fixed4 col = tex2D(_MainTex, i.uv);//Ô­Ê¼Í¼Æ¬²ÉÑùµÄÑÕÉ«
-                float originalAlpha = col.a;//Ô­Ê¼µÄalphaÖµ
+            fixed4 frag(v2f i) : SV_Target { 
+                fixed4 col = tex2D(_MainTex, i.uv);//åŸå§‹å›¾ç‰‡é‡‡æ ·çš„é¢œè‰²
+                float originalAlpha = col.a;//åŸå§‹çš„alphaå€¼
 
-                float2 tiledUvFade = TRANSFORM_TEX(i.uv, _FadeTex);//µÃµ½ÔëÉùtextureµÄUV×ø±ê
+                float2 tiledUvFade = TRANSFORM_TEX(i.uv, _FadeTex);//å¾—åˆ°å™ªå£°textureçš„UVåæ ‡
 
-                float fadeTemp = tex2D(_FadeTex, tiledUvFade).r;//Ñ¡È¡ÔëÉùtextureµÄrÖµÀ´½øĞĞÏûÊ§µÄÅĞ¶¨
-                float fade = step(_FadeAmount, fadeTemp);//Í¨¹ıtextureµÄrÖµÖµÀ´½øĞĞÈÜ½âÅĞ¶¨£¬¸ßÓÚ_FadeAmountÎª1£¬·´Ö®Îª0
-                float fadeBurn = saturate(step(_FadeAmount - _FadeBurnWidth, fadeTemp));//µ±ÑÕÉ«¸²¸Ç_FadeBurnWidthÒÔºó²Å¿ªÊ¼ÈÜ½âµÄÖµ Ò²ÊÇ0»ò1
-                col.a *= fade;//ÈÃÔ­±¾µÄÑÕÉ«µÄalphaÖµºÍfadeÏà³ËÀ´±íÊ¾ÏûÊ§µÄ²¿·Ö
-                col += fadeBurn * tex2D(_FadeTex, tiledUvFade) * _FadeColor * originalAlpha * (1 - col.a);//Ïà³ËµÃµ½×îºóµÄÈÜ½âĞ§¹û
+                float fadeTemp = tex2D(_FadeTex, tiledUvFade).r;//é€‰å–å™ªå£°textureçš„rå€¼æ¥è¿›è¡Œæ¶ˆå¤±çš„åˆ¤å®š
+                float fade = step(_FadeAmount, fadeTemp);//é€šè¿‡textureçš„rå€¼å€¼æ¥è¿›è¡Œæº¶è§£åˆ¤å®šï¼Œé«˜äº_FadeAmountä¸º1ï¼Œåä¹‹ä¸º0
+                float fadeBurn = saturate(step(_FadeAmount - _FadeBurnWidth, fadeTemp));//å½“é¢œè‰²è¦†ç›–_FadeBurnWidthä»¥åæ‰å¼€å§‹æº¶è§£çš„å€¼ ä¹Ÿæ˜¯0æˆ–1
+                col.a *= fade;//è®©åŸæœ¬çš„é¢œè‰²çš„alphaå€¼å’Œfadeç›¸ä¹˜æ¥è¡¨ç¤ºæ¶ˆå¤±çš„éƒ¨åˆ†
+                col += fadeBurn * tex2D(_FadeTex, tiledUvFade) * _FadeColor * originalAlpha * (1 - col.a);//ç›¸ä¹˜å¾—åˆ°æœ€åçš„æº¶è§£æ•ˆæœ
 
                 return col;
             }

@@ -1,13 +1,13 @@
 Shader "Hidden/Gradient" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _GradBlend ("GradientBlend", Range(0, 1)) = 1 //ÑÕÉ«»ìºÏµÄ³Ì¶È
-        _GradTopLeftCol ("TopLeftCol", Color) = (1, 0, 0, 1) //×óÉÏ½ÇµÄÑÕÉ«
-        _GradTopRightCol ("TopRightColor", Color) = (1, 1, 0, 1) //ÓÒÉÏ½ÇµÄÑÕÉ«
-        _GradBottomLeftColor ("BottomLeftColor", Color) = (0, 0, 1, 1) //×óÏÂ½ÇµÄÑÕÉ«
-        _GradBottomRightColor ("BottomRightColor", Color) = (0, 1, 0, 1) //ÓÒÏÂ½ÇµÄÑÕÉ«
-        _GradBoostX ("GradBoostX", Range(0.1, 2)) = 1.2 //×ó±ßºÍÓÒ±ßµÄÕ¼±È
-        _GradBoostY ("_GradBoostY", Range(0.1, 2)) = 1.2 //ÉÏ±ßºÍÏÂ±ßµÄÕ¼±È
+        _GradBlend ("GradientBlend", Range(0, 1)) = 1 //é¢œè‰²æ··åˆçš„ç¨‹åº¦
+        _GradTopLeftCol ("TopLeftCol", Color) = (1, 0, 0, 1) //å·¦ä¸Šè§’çš„é¢œè‰²
+        _GradTopRightCol ("TopRightColor", Color) = (1, 1, 0, 1) //å³ä¸Šè§’çš„é¢œè‰²
+        _GradBottomLeftColor ("BottomLeftColor", Color) = (0, 0, 1, 1) //å·¦ä¸‹è§’çš„é¢œè‰²
+        _GradBottomRightColor ("BottomRightColor", Color) = (0, 1, 0, 1) //å³ä¸‹è§’çš„é¢œè‰²
+        _GradBoostX ("GradBoostX", Range(0.1, 2)) = 1.2 //å·¦è¾¹å’Œå³è¾¹çš„å æ¯”
+        _GradBoostY ("_GradBoostY", Range(0.1, 2)) = 1.2 //ä¸Šè¾¹å’Œä¸‹è¾¹çš„å æ¯”
 
     }
     SubShader {
@@ -46,13 +46,13 @@ Shader "Hidden/Gradient" {
             fixed4 frag(v2f i) : SV_Target {
                 fixed4 col = tex2D(_MainTex, i.uv);
 
-                float gradXLerpFactor = saturate(pow(i.uv.x, _GradBoostX));//Ë®Æ½Ìİ¶ÈµÄÆ½»¬Òò×Ó ÓÃpow¼ÆËã£¬ÎÒÒ²²»ÖªµÀÎªÊ²Ã´
-                float gradYLerpFactor = saturate(pow(i.uv.y, _GradBoostY));//´¹Ö±Ìİ¶ÈµÄÆ½»¬Òò×Ó
-                //¸ù¾İË®Æ½ºÍ´¹Ö±·½ÏòµÄ²åÖµÒò×Ó,ÒÔ¼°ÑÕÉ«Ìİ¶ÈµÄËÄ¸ö½ÇÉ«²ÊÑÕÉ«,ÖµÍ¨¹ıË«ÏßĞÔ²åÖµ¼ÆËã³ö×îÖÕµÄÑÕÉ«Ìİ¶ÈĞ§¹û¡£
+                float gradXLerpFactor = saturate(pow(i.uv.x, _GradBoostX));//æ°´å¹³æ¢¯åº¦çš„å¹³æ»‘å› å­ ç”¨powè®¡ç®—ï¼Œæˆ‘ä¹Ÿä¸çŸ¥é“ä¸ºä»€ä¹ˆ
+                float gradYLerpFactor = saturate(pow(i.uv.y, _GradBoostY));//å‚ç›´æ¢¯åº¦çš„å¹³æ»‘å› å­
+                //æ ¹æ®æ°´å¹³å’Œå‚ç›´æ–¹å‘çš„æ’å€¼å› å­,ä»¥åŠé¢œè‰²æ¢¯åº¦çš„å››ä¸ªè§’è‰²å½©é¢œè‰²,å€¼é€šè¿‡åŒçº¿æ€§æ’å€¼è®¡ç®—å‡ºæœ€ç»ˆçš„é¢œè‰²æ¢¯åº¦æ•ˆæœã€‚
                 fixed4 gradientResult = lerp(lerp(_GradBotLeftCol, _GradBotRightCol, gradXLerpFactor),
                 lerp(_GradTopLeftCol, _GradTopRightCol, gradXLerpFactor), gradYLerpFactor);
-                gradientResult = lerp(col, gradientResult, _GradBlend);//½«ÑÕÉ«Ìİ¶ÈĞ§¹ûÓëÔ­Ê¼ÎÆÀíÑÕÉ«½øĞĞ»ìºÏ£¬¸ù¾İ_GradBlendµÄÖµ½øĞĞ²åÖµ¡£
-                col.rgb = gradientResult.rgb * col.a;//½«»ìºÏºóµÄÑÕÉ«Ó¦ÓÃµ½Ô­Ê¼ÑÕÉ«µÄRGB·ÖÁ¿ÉÏ£¬Í¬Ê±³ËÒÔÔ­Ê¼ÑÕÉ«µÄÍ¸Ã÷¶È£¬ÒÔÈ·±£ÑÕÉ«»ìºÏºóµÄÍ¸Ã÷¶ÈÕıÈ·
+                gradientResult = lerp(col, gradientResult, _GradBlend);//å°†é¢œè‰²æ¢¯åº¦æ•ˆæœä¸åŸå§‹çº¹ç†é¢œè‰²è¿›è¡Œæ··åˆï¼Œæ ¹æ®_GradBlendçš„å€¼è¿›è¡Œæ’å€¼ã€‚
+                col.rgb = gradientResult.rgb * col.a;//å°†æ··åˆåçš„é¢œè‰²åº”ç”¨åˆ°åŸå§‹é¢œè‰²çš„RGBåˆ†é‡ä¸Šï¼ŒåŒæ—¶ä¹˜ä»¥åŸå§‹é¢œè‰²çš„é€æ˜åº¦ï¼Œä»¥ç¡®ä¿é¢œè‰²æ··åˆåçš„é€æ˜åº¦æ­£ç¡®
                 return col;
             }
             ENDCG

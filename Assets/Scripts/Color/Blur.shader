@@ -1,60 +1,60 @@
 Shader "Hidden/Blur" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _BlurIntensity ("Blur Intensity", Range(0, 12)) = 10 //Ä£ºıÇ¿¶È
+        _BlurIntensity ("Blur Intensity", Range(0, 12)) = 10 //æ¨¡ç³Šå¼ºåº¦
 
     }
     SubShader {
-        Tags { "Queue" = "Transparent" }
-        Blend SrcAlpha OneMinusSrcAlpha
+        Tags { "Queue" = "Transparent" } // è®¾ç½®æ¸²æŸ“é˜Ÿåˆ—ä¸ºé€æ˜æ¸²æŸ“é˜Ÿåˆ—
+        Blend SrcAlpha OneMinusSrcAlpha // è®¾ç½®æ··åˆæ¨¡å¼ä¸ºæºé¢œè‰²*æºé¢œè‰²çš„alphaå€¼+ç›®æ ‡é¢œè‰²*1-æºé¢œè‰²çš„alphaå€¼
 
-        Pass {
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
+        Pass { //ç¬¬ä¸€ä¸ªPassç”¨äºç»˜åˆ¶æ¨¡ç³Šæ•ˆæœ
+            CGPROGRAM //ä½¿ç”¨CGè¯­è¨€ç¼–å†™Shader
+            #pragma vertex vert //æŒ‡å®šé¡¶ç‚¹ç€è‰²å™¨å‡½æ•°
+            #pragma fragment frag //æŒ‡å®šç‰‡å…ƒç€è‰²å™¨å‡½æ•°
 
-            #include "UnityCG.cginc"
+            #include "UnityCG.cginc" //åŒ…å«Unityçš„å†…ç½®å‡½æ•°åº“
 
-            sampler2D _MainTex;
-            half _BlurIntensity;
+            sampler2D _MainTex; //çº¹ç†å±æ€§
+            half _BlurIntensity; //æ¨¡ç³Šå¼ºåº¦å±æ€§
 
-            struct appdata {
+            struct appdata { //å®šä¹‰è¾“å…¥ç»“æ„ä½“ï¼Œqï¼šè¿™ä¸ªç»“æ„ä½“ç»“æ„æ˜¯å›ºå®šçš„å—ï¼Ÿaï¼šæ˜¯çš„ï¼Œè¿™ä¸ªç»“æ„ä½“æ˜¯å›ºå®šçš„ï¼ŒUnityä¼šè‡ªåŠ¨è¯†åˆ«è¿™ä¸ªç»“æ„ä½“ï¼Œç„¶åå°†é¡¶ç‚¹æ•°æ®ä¼ é€’ç»™è¿™ä¸ªç»“æ„ä½“ã€‚
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
                 fixed4 color : COLOR;
             };
 
-            struct v2f {
-                float2 uv : TEXCOORD0;
-                float4 vertex : SV_POSITION;
-                fixed4 color : COLOR;
+            struct v2f { //å®šä¹‰è¾“å‡ºç»“æ„ä½“
+                float2 uv : TEXCOORD0; //çº¹ç†åæ ‡
+                float4 vertex : SV_POSITION; //é¡¶ç‚¹åæ ‡ï¼ŒSV_POSITIONè¡¨ç¤ºè¿™ä¸ªå˜é‡æ˜¯é¡¶ç‚¹åæ ‡ï¼Œè¿™ä¸ªå˜é‡ä¼šè¢«ä¼ é€’ç»™åƒç´ ç€è‰²å™¨ï¼Œq: ä¼šåšæ’å€¼å—ï¼Ÿa: ä¼šåšæ’å€¼
+                fixed4 color : COLOR; //é¡¶ç‚¹é¢œè‰²
             };
 
-            //¼ÆËã¸ßË¹Ä£ºıÖĞµÄ¸ßË¹º¯ÊıµÄÖµµÄº¯Êı
-            half BlurHD_G(half bhqp, half x) {//bhqpÊÇÒ»¸öÓ°Ïì¸ßË¹º¯ÊıĞÎ×´µÄ²ÎÊı£¬¶øxÔòÊÇ×Ô±äÁ¿
-                return exp( - (x * x) / (2.0 * bhqp * bhqp));//exp±íÊ¾×ÔÈ»Ö¸Êıº¯Êı,¼ÆËãeµÄx´ÎÃİ -(x*x)/(2.0*bhqp*bhqp):ÕâÊÇ¸ßË¹º¯ÊıµÄÖ¸Êı²¿·Ö
+            //è®¡ç®—é«˜æ–¯æ¨¡ç³Šä¸­çš„é«˜æ–¯å‡½æ•°çš„å€¼çš„å‡½æ•°
+            half BlurHD_G(half bhqp, half x) {//bhqpæ˜¯ä¸€ä¸ªå½±å“é«˜æ–¯å‡½æ•°å½¢çŠ¶çš„å‚æ•°ï¼Œè€Œxåˆ™æ˜¯è‡ªå˜é‡
+                return exp( - (x * x) / (2.0 * bhqp * bhqp));//expè¡¨ç¤ºè‡ªç„¶æŒ‡æ•°å‡½æ•°,è®¡ç®—eçš„xæ¬¡å¹‚ -(x*x)/(2.0*bhqp*bhqp):è¿™æ˜¯é«˜æ–¯å‡½æ•°çš„æŒ‡æ•°éƒ¨åˆ†
             }
 
-            //ÊµÏÖÁË¸ßË¹Ä£ºıµÄ¹¦ÄÜ
-            //uv±íÊ¾µ±Ç°ÏñËØµÄÎÆÀí×ø±ê£¬sourceÊÇÊäÈëÎÆÀí£¬IntensityÊÇÄ£ºıµÄÇ¿¶È£¬xScaleºÍyScale·Ö±ğ±íÊ¾Ë®Æ½ºÍ´¹Ö±·½ÏòµÄËõ·Å±ÈÀı¡£
+            //å®ç°äº†é«˜æ–¯æ¨¡ç³Šçš„åŠŸèƒ½
+            //uvè¡¨ç¤ºå½“å‰åƒç´ çš„çº¹ç†åæ ‡ï¼Œsourceæ˜¯è¾“å…¥çº¹ç†ï¼ŒIntensityæ˜¯æ¨¡ç³Šçš„å¼ºåº¦ï¼ŒxScaleå’ŒyScaleåˆ†åˆ«è¡¨ç¤ºæ°´å¹³å’Œå‚ç›´æ–¹å‘çš„ç¼©æ”¾æ¯”ä¾‹ã€‚
             half4 BlurHD(half2 uv, sampler2D source, half Intensity, half xScale, half yScale) {
-                int iterations = 16;//¶¨ÒåÁËÄ£ºıµÄµü´ú´ÎÊı£¬¼´ÔÚÄ£ºı¹ı³ÌÖĞ²ÉÑùµÄ´ÎÊı
-                int halfIterations = iterations / 2;//¼ÆËãµü´ú´ÎÊıµÄÒ»°ë£¬ÓÃÓÚÈ·¶¨Ä£ºıºËµÄÖĞĞÄÎ»ÖÃ
-                half sigmaX = 0.1 + Intensity * 0.5;//¼ÆËãË®Æ½ºÍ´¹Ö±·½ÏòµÄ¸ßË¹Ä£ºıµÄ±ê×¼²î¡£Intensity²ÎÊıÓÃÓÚµ÷ÕûÄ£ºıµÄÇ¿¶È£¬Ô½´óÔòÄ£ºı³Ì¶ÈÔ½¸ß
+                int iterations = 16;//å®šä¹‰äº†æ¨¡ç³Šçš„è¿­ä»£æ¬¡æ•°ï¼Œå³åœ¨æ¨¡ç³Šè¿‡ç¨‹ä¸­é‡‡æ ·çš„æ¬¡æ•°
+                int halfIterations = iterations / 2;//è®¡ç®—è¿­ä»£æ¬¡æ•°çš„ä¸€åŠï¼Œç”¨äºç¡®å®šæ¨¡ç³Šæ ¸çš„ä¸­å¿ƒä½ç½®
+                half sigmaX = 0.1 + Intensity * 0.5;//è®¡ç®—æ°´å¹³å’Œå‚ç›´æ–¹å‘çš„é«˜æ–¯æ¨¡ç³Šçš„æ ‡å‡†å·®ã€‚Intensityå‚æ•°ç”¨äºè°ƒæ•´æ¨¡ç³Šçš„å¼ºåº¦ï¼Œè¶Šå¤§åˆ™æ¨¡ç³Šç¨‹åº¦è¶Šé«˜
                 half sigmaY = sigmaX;
-                half total = 0.0;//³õÊ¼»¯×ÜÈ¨ÖØ
-                half4 ret = half4(0, 0, 0, 0);//³õÊ¼»¯Ä£ºı½á¹û
-                for (int iy = 0; iy < iterations; ++iy) {//ÄÚ²ãÑ­»·±éÀúË®Æ½·½ÏòµÄµü´ú´ÎÊı
-                    half fy = BlurHD_G(sigmaY, half(iy) - half(halfIterations));//¼ÆËãµ±Ç°Ë®Æ½·½ÏòµÄ¸ßË¹È¨ÖØ
-                    half offsetY = half(iy - halfIterations) * 0.00390625 * xScale;//¼ÆËãµ±Ç°ÏñËØÔÚÎÆÀí×ø±êÖĞµÄÆ«ÒÆÁ¿
-                    for (int ix = 0; ix < iterations; ++ix) {////ÄÚ²ãÑ­»·±éÀú´¹Ö±·½ÏòµÄµü´ú´ÎÊı
-                        half fx = BlurHD_G(sigmaX, half(ix) - half(halfIterations));//¼ÆËãµ±Ç°ÏñËØÔÚÎÆÀí×ø±êÖĞµÄË®Æ½Æ«ÒÆÁ¿
-                        half offsetX = half(ix - halfIterations) * 0.00390625 * yScale;//¼ÆËãµ±Ç°ÏñËØÔÚÎÆÀí×ø±êÖĞµÄË®Æ½Æ«ÒÆÁ¿
-                        total += fx * fy;//ÀÛ¼Óµ±Ç°ÏñËØµÄÈ¨ÖØ
-                        ret += tex2D(source, uv + half2(offsetX, offsetY)) * fx * fy;//¸ù¾İµ±Ç°ÏñËØµÄÈ¨ÖØ£¬²ÉÑùÊäÈëÎÆÀí£¬¼ÆËãÄ£ºı½á¹û¡£
+                half total = 0.0;//åˆå§‹åŒ–æ€»æƒé‡
+                half4 ret = half4(0, 0, 0, 0);//åˆå§‹åŒ–æ¨¡ç³Šç»“æœ
+                for (int iy = 0; iy < iterations; ++iy) {//å†…å±‚å¾ªç¯éå†æ°´å¹³æ–¹å‘çš„è¿­ä»£æ¬¡æ•°
+                    half fy = BlurHD_G(sigmaY, half(iy) - half(halfIterations));//è®¡ç®—å½“å‰æ°´å¹³æ–¹å‘çš„é«˜æ–¯æƒé‡
+                    half offsetY = half(iy - halfIterations) * 0.00390625 * xScale;//è®¡ç®—å½“å‰åƒç´ åœ¨çº¹ç†åæ ‡ä¸­çš„åç§»é‡
+                    for (int ix = 0; ix < iterations; ++ix) {////å†…å±‚å¾ªç¯éå†å‚ç›´æ–¹å‘çš„è¿­ä»£æ¬¡æ•°
+                        half fx = BlurHD_G(sigmaX, half(ix) - half(halfIterations));//è®¡ç®—å½“å‰åƒç´ åœ¨çº¹ç†åæ ‡ä¸­çš„æ°´å¹³åç§»é‡
+                        half offsetX = half(ix - halfIterations) * 0.00390625 * yScale;//è®¡ç®—å½“å‰åƒç´ åœ¨çº¹ç†åæ ‡ä¸­çš„æ°´å¹³åç§»é‡
+                        total += fx * fy;//ç´¯åŠ å½“å‰åƒç´ çš„æƒé‡
+                        ret += tex2D(source, uv + half2(offsetX, offsetY)) * fx * fy;//æ ¹æ®å½“å‰åƒç´ çš„æƒé‡ï¼Œé‡‡æ ·è¾“å…¥çº¹ç†ï¼Œè®¡ç®—æ¨¡ç³Šç»“æœã€‚
                     }
                 }
-                return ret / total;//·µ»Ø×îÖÕµÄÄ£ºı½á¹û£¬³ıÒÔ×ÜÈ¨ÖØÒÔ¹éÒ»»¯½á¹û¡£
+                return ret / total;//è¿”å›æœ€ç»ˆçš„æ¨¡ç³Šç»“æœï¼Œé™¤ä»¥æ€»æƒé‡ä»¥å½’ä¸€åŒ–ç»“æœã€‚
             }
 
             v2f vert(appdata v) {

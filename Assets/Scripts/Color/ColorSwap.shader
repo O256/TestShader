@@ -1,19 +1,19 @@
 Shader "Hidden/ColorSwap" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        [NoScaleOffset] _ColorSwapTex ("Color Swap Texture", 2D) = "black" { }//»»ÑÕÉ«ÓÃµÄRGBÍ¼
-        [HDR]_ColorSwapRed ("Red Channel", Color) = (1, 1, 1, 1) //ºìÉ«Í¨µÀ»»³ÉÊ²Ã´ÑÕÉ«
-        _ColorSwapRedLuminosity ("Red luminosity", Range(-1, 1)) = 0.5 //ºìÉ«Í¨µÀÓ°ÏìµÄ´óĞ¡
-        [HDR]_ColorSwapGreen ("Green Channel", Color) = (1, 1, 1, 1) //ÂÌÉ«Í¨µÀ»»³ÉÊ²Ã´ÑÕÉ«
-        _ColorSwapGreenLuminosity ("Green luminosity", Range(-1, 1)) = 0.5 //ÂÌÉ«Í¨µÀÓ°ÏìµÄ´óĞ¡
-        [HDR]_ColorSwapBlue ("Blue Channel", Color) = (1, 1, 1, 1) //À¶É«Í¨µÀ»»³ÉÊ²Ã´ÑÕÉ«
-        _ColorSwapBlueLuminosity ("Blue luminosity", Range(-1, 1)) = 0.5 //À¶É«Í¨µÀÓ°ÏìµÄ´óĞ¡
-        _ColorSwapBlend ("Color Swap Blend", Range(0, 1)) = 1 //ÑÕÉ«»ìºÏ³Ì¶ÈµÄ´óĞ¡
+        [NoScaleOffset] _ColorSwapTex ("Color Swap Texture", 2D) = "black" { }//æ¢é¢œè‰²ç”¨çš„RGBå›¾
+        [HDR]_ColorSwapRed ("Red Channel", Color) = (1, 1, 1, 1) //çº¢è‰²é€šé“æ¢æˆä»€ä¹ˆé¢œè‰²
+        _ColorSwapRedLuminosity ("Red luminosity", Range(-1, 1)) = 0.5 //çº¢è‰²é€šé“å½±å“çš„å¤§å°
+        [HDR]_ColorSwapGreen ("Green Channel", Color) = (1, 1, 1, 1) //ç»¿è‰²é€šé“æ¢æˆä»€ä¹ˆé¢œè‰²
+        _ColorSwapGreenLuminosity ("Green luminosity", Range(-1, 1)) = 0.5 //ç»¿è‰²é€šé“å½±å“çš„å¤§å°
+        [HDR]_ColorSwapBlue ("Blue Channel", Color) = (1, 1, 1, 1) //è“è‰²é€šé“æ¢æˆä»€ä¹ˆé¢œè‰²
+        _ColorSwapBlueLuminosity ("Blue luminosity", Range(-1, 1)) = 0.5 //è“è‰²é€šé“å½±å“çš„å¤§å°
+        _ColorSwapBlend ("Color Swap Blend", Range(0, 1)) = 1 //é¢œè‰²æ··åˆç¨‹åº¦çš„å¤§å°
 
     }
     SubShader {
-        Tags { "Queue" = "Transparent" }
-        Blend SrcAlpha OneMinusSrcAlpha
+        Tags { "Queue" = "Transparent" } //é€æ˜é˜Ÿåˆ—
+        Blend SrcAlpha OneMinusSrcAlpha //é€æ˜æ··åˆ
 
         Pass {
             CGPROGRAM
@@ -37,24 +37,24 @@ Shader "Hidden/ColorSwap" {
                 float4 vertex : SV_POSITION;
             };
 
-            v2f vert(appdata v) {
+            v2f vert(appdata v) { //é¡¶ç‚¹ç€è‰²å™¨æœ€é‡è¦çš„ä½œç”¨æ˜¯å°†é¡¶ç‚¹ä»æ¨¡å‹ç©ºé—´è½¬æ¢åˆ°è£å‰ªç©ºé—´
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.vertex = UnityObjectToClipPos(v.vertex); //å°†é¡¶ç‚¹ä»æ¨¡å‹ç©ºé—´è½¬æ¢åˆ°è£å‰ªç©ºé—´
                 o.uv = v.uv;
                 return o;
             }
 
-            fixed4 frag(v2f i) : SV_Target {
-                fixed4 col = tex2D(_MainTex, i.uv);
+            fixed4 frag(v2f i) : SV_Target { //ç‰‡å…ƒç€è‰²å™¨çš„ä½œç”¨æ˜¯è®¡ç®—ç‰‡å…ƒçš„é¢œè‰²
+                fixed4 col = tex2D(_MainTex, i.uv); //å¯¹_MainTexè¿›è¡Œé‡‡æ ·
                 
-                float luminance = 0.3 * col.r + 0.59 * col.g + 0.11 * col.b;//¼ÆËãÁËµ±Ç°ÏñËØµÄÁÁ¶È£¨»Ò¶ÈÖµ£©ÓÃÓÚÒ»Ğ©ÒõÓ°²¿·ÖÄÜ¿´³öÀ´
-                half4 swapMask = tex2D(_ColorSwapTex, i.uv);//¶ÔRGBÍ¼½øĞĞ²ÉÑù
-                swapMask.rgb *= swapMask.a;//È·±£ÑÕÉ«½»»»µÄÕÚÕÖÕıÈ·Ó¦ÓÃ RGBÍ¼Ã»ÓĞµÄµØ·½¾ÍÊÇºÚµÄ
-                half3 redSwap = _ColorSwapRed * swapMask.r * saturate(luminance + _ColorSwapRedLuminosity);//¼ÆËãÁËºìÉ«Í¨µÀµÄÑÕÉ«½»»»Ğ§¹û
-                half3 greenSwap = _ColorSwapGreen * swapMask.g * saturate(luminance + _ColorSwapGreenLuminosity);//¼ÆËãÁËÂÌÉ«Í¨µÀµÄÑÕÉ«½»»»Ğ§¹û
-                half3 blueSwap = _ColorSwapBlue * swapMask.b * saturate(luminance + _ColorSwapBlueLuminosity);//¼ÆËãÁËÀ¶É«Í¨µÀµÄÑÕÉ«½»»»Ğ§¹û
-                swapMask.rgb = col.rgb * saturate(1 - swapMask.r - swapMask.g - swapMask.b);//¼ÆËãÁËµ±Ç°Æ¬ÔªÃ¿ÖÖÑÕÉ«²»²ÎÓëÑÕÉ«½»»»µÄ³Ì¶È
-                col.rgb = lerp(col.rgb, swapMask.rgb + redSwap + greenSwap + blueSwap, _ColorSwapBlend);//½«Ô­Ê¼É«Óë½»»»ºóÑÕÉ«»ìºÏ ¿ÉÓÃ_ColorSwapBlendµ÷Õû
+                float luminance = 0.3 * col.r + 0.59 * col.g + 0.11 * col.b;//è®¡ç®—äº†å½“å‰åƒç´ çš„äº®åº¦ï¼ˆç°åº¦å€¼ï¼‰ç”¨äºä¸€äº›é˜´å½±éƒ¨åˆ†èƒ½çœ‹å‡ºæ¥
+                half4 swapMask = tex2D(_ColorSwapTex, i.uv);//å¯¹RGBå›¾è¿›è¡Œé‡‡æ ·
+                swapMask.rgb *= swapMask.a;//ç¡®ä¿é¢œè‰²äº¤æ¢çš„é®ç½©æ­£ç¡®åº”ç”¨ RGBå›¾æ²¡æœ‰çš„åœ°æ–¹å°±æ˜¯é»‘çš„
+                half3 redSwap = _ColorSwapRed * swapMask.r * saturate(luminance + _ColorSwapRedLuminosity);//è®¡ç®—äº†çº¢è‰²é€šé“çš„é¢œè‰²äº¤æ¢æ•ˆæœ
+                half3 greenSwap = _ColorSwapGreen * swapMask.g * saturate(luminance + _ColorSwapGreenLuminosity);//è®¡ç®—äº†ç»¿è‰²é€šé“çš„é¢œè‰²äº¤æ¢æ•ˆæœ
+                half3 blueSwap = _ColorSwapBlue * swapMask.b * saturate(luminance + _ColorSwapBlueLuminosity);//è®¡ç®—äº†è“è‰²é€šé“çš„é¢œè‰²äº¤æ¢æ•ˆæœ
+                swapMask.rgb = col.rgb * saturate(1 - swapMask.r - swapMask.g - swapMask.b);//è®¡ç®—äº†å½“å‰ç‰‡å…ƒæ¯ç§é¢œè‰²ä¸å‚ä¸é¢œè‰²äº¤æ¢çš„ç¨‹åº¦
+                col.rgb = lerp(col.rgb, swapMask.rgb + redSwap + greenSwap + blueSwap, _ColorSwapBlend);//å°†åŸå§‹è‰²ä¸äº¤æ¢åé¢œè‰²æ··åˆ å¯ç”¨_ColorSwapBlendè°ƒæ•´
 
                 return col;
             }
