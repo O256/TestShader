@@ -31,6 +31,6 @@ Material:
     m_Floats:
     - _GhostBlend: 1
     - _GhostColorBoost: 5
-    - _GhostTransparency: 0.89
+    - _GhostTransparency: 0
     m_Colors: []
   m_BuildTextureStacks: []

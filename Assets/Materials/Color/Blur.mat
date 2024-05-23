@@ -30,6 +30,6 @@ Material:
     m_Ints: []
     m_Floats:
     - _BlurHD: 0
-    - _BlurIntensity: 6.51
+    - _BlurIntensity: 4.88
     m_Colors: []
   m_BuildTextureStacks: []
