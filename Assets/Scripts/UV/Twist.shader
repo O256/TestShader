@@ -1,8 +1,8 @@
 Shader "Hidden/Twist" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _TwistUvAmount ("Twist Amount", Range(0, 3.1416)) = 1 //Å¤ÇúÇ¿¶È
-        _TwistUvRadius ("Twist Radius", Range(0, 3)) = 0.75 //Å¤Çú°ë¾¶
+        _TwistUvAmount ("Twist Amount", Range(0, 3.1416)) = 1 //æ‰­æ›²å¼ºåº¦
+        _TwistUvRadius ("Twist Radius", Range(0, 3)) = 0.75 //æ‰­æ›²åŠå¾„
 
     }
     SubShader {
@@ -38,18 +38,18 @@ Shader "Hidden/Twist" {
             half _TwistUvAmount, _TwistUvRadius;
 
             fixed4 frag(v2f i) : SV_Target {
-                half2 tempUv = i.uv - half2(0.5, 0.5);//¼ÆËãµ±Ç°ÏñËØ¾àÀëÎÆÀíÖĞĞÄµÄ¾àÀë
-                half percent = (_TwistUvRadius - length(tempUv)) / (_TwistUvRadius + 0.001);//¼ÆËãÃ¿¸öÏñËØµã¾àÀëÅ¤ÇúÖĞĞÄµÄ°Ù·Ö±È
-                half theta = percent * percent * (2.0 * sin(_TwistUvAmount)) * 8;//¸ù¾İ¾àÀë°Ù·Ö±È¼ÆËã½Ç¶È
-                half s = sin(theta);//¼ÆËã³ö½Ç¶È¶ÔÓ¦µÄÕıÏÒÖµ
-                half c = cos(theta);//¼ÆËã³ö½Ç¶È¶ÔÓ¦µÄÓàÏÒÖµ
-                half beta = max(sign(_TwistUvRadius - length(tempUv)), 0);//¸ù¾İ¾àÀëÅ¤ÇúÖĞĞÄµÄ¾àÀë£¬È·¶¨ÄÄĞ©ÏñËØµãĞèÒª½øĞĞÅ¤Çú
-                //dot(tempUv, half2(c, -s)), dot(tempUv, half2(s, c)))ÊÇĞı×ª¾ØÕóĞı×ªµÄËã·¨
-                //beta + tempUv * (1 - beta) ²¿·Ö¸ù¾İbetaÀ´¿ØÖÆÊÇ·ñÓ¦ÓÃÅ¤Çú
-                tempUv = half2(dot(tempUv, half2(c, -s)), dot(tempUv, half2(s, c))) * beta;//ÕâÀïÊ¹ÓÃÁËÏòÁ¿µÄµã³ËÀ´ÊµÏÖ¶şÎ¬Ğı×ª
-                tempUv += half2(0.5, 0.5);//½«ÎÆÀí×ø±ê»¹Ô­µ½Ô­Ê¼·¶Î§ÄÚ
-                i.uv = tempUv;//½«½á¹ûÓ¦ÓÃµ½ÏñËØµÄÎÆÀí×ø±êÉÏ
-                fixed4 col = tex2D(_MainTex, i.uv);//²ÉÑù
+                half2 tempUv = i.uv - half2(0.5, 0.5);//è®¡ç®—å½“å‰åƒç´ è·ç¦»çº¹ç†ä¸­å¿ƒçš„è·ç¦»
+                half percent = (_TwistUvRadius - length(tempUv)) / (_TwistUvRadius + 0.001);//è®¡ç®—æ¯ä¸ªåƒç´ ç‚¹è·ç¦»æ‰­æ›²ä¸­å¿ƒçš„ç™¾åˆ†æ¯”
+                half theta = percent * percent * (2.0 * sin(_TwistUvAmount)) * 8;//æ ¹æ®è·ç¦»ç™¾åˆ†æ¯”è®¡ç®—è§’åº¦
+                half s = sin(theta);//è®¡ç®—å‡ºè§’åº¦å¯¹åº”çš„æ­£å¼¦å€¼
+                half c = cos(theta);//è®¡ç®—å‡ºè§’åº¦å¯¹åº”çš„ä½™å¼¦å€¼
+                half beta = max(sign(_TwistUvRadius - length(tempUv)), 0);//æ ¹æ®è·ç¦»æ‰­æ›²ä¸­å¿ƒçš„è·ç¦»ï¼Œç¡®å®šå“ªäº›åƒç´ ç‚¹éœ€è¦è¿›è¡Œæ‰­æ›²
+                //dot(tempUv, half2(c, -s)), dot(tempUv, half2(s, c)))æ˜¯æ—‹è½¬çŸ©é˜µæ—‹è½¬çš„ç®—æ³•
+                //beta + tempUv * (1 - beta) éƒ¨åˆ†æ ¹æ®betaæ¥æ§åˆ¶æ˜¯å¦åº”ç”¨æ‰­æ›²
+                tempUv = half2(dot(tempUv, half2(c, -s)), dot(tempUv, half2(s, c))) * beta;//è¿™é‡Œä½¿ç”¨äº†å‘é‡çš„ç‚¹ä¹˜æ¥å®ç°äºŒç»´æ—‹è½¬
+                tempUv += half2(0.5, 0.5);//å°†çº¹ç†åæ ‡è¿˜åŸåˆ°åŸå§‹èŒƒå›´å†…
+                i.uv = tempUv;//å°†ç»“æœåº”ç”¨åˆ°åƒç´ çš„çº¹ç†åæ ‡ä¸Š
+                fixed4 col = tex2D(_MainTex, i.uv);//é‡‡æ ·
 
                 return col;
             }

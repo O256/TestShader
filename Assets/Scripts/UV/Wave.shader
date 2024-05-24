@@ -1,11 +1,11 @@
 Shader "Hidden/Wave" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _WaveAmount ("Wave Amount", Range(0, 25)) = 7 //²ÉÑùµÄÆ«²îÖµ
-        _WaveSpeed ("Wave Speed", Range(0, 25)) = 10 //²¨¶¯ËÙ¶È
-        _WaveStrength ("Wave Strength", Range(0, 25)) = 7.5 //²¨¶¯µÄ·ù¶È´óĞ¡
-        _WaveX ("Wave X Axis", Range(0, 1)) = 0 //²¨¶¯µÄÔ­µãX
-        _WaveY ("Wave Y Axis", Range(0, 1)) = 0.5 //²¨¶¯µÄÔ­µãY
+        _WaveAmount ("Wave Amount", Range(0, 25)) = 7 //é‡‡æ ·çš„åå·®å€¼
+        _WaveSpeed ("Wave Speed", Range(0, 25)) = 10 //æ³¢åŠ¨é€Ÿåº¦
+        _WaveStrength ("Wave Strength", Range(0, 25)) = 7.5 //æ³¢åŠ¨çš„å¹…åº¦å¤§å°
+        _WaveX ("Wave X Axis", Range(0, 1)) = 0 //æ³¢åŠ¨çš„åŸç‚¹X
+        _WaveY ("Wave Y Axis", Range(0, 1)) = 0.5 //æ³¢åŠ¨çš„åŸç‚¹Y
 
     }
     SubShader {
@@ -41,16 +41,16 @@ Shader "Hidden/Wave" {
             }
 
             fixed4 frag(v2f i) : SV_Target {
-                float2 uvWave = half2(_WaveX *  _MainTex_ST.x, _WaveY *  _MainTex_ST.y) - i.uv;//µÃµ½Ò»¸öÏà¶ÔÓÚµ±Ç°ÏñËØÎ»ÖÃµÄ²¨ÀËÏòÁ¿
-                uvWave.x *= _ScreenParams.x / _ScreenParams.y;//ÕâÀï³ËÒÔÁËÒ»¸öÆÁÄ»¿í¸ß±ÈµÄÒò×Ó£¬Ä¿µÄÊÇÔÚ·Ç·½ĞÎÆÁÄ»ÉÏ±£³Ö²¨ÀËµÄ±ÈÀı
+                float2 uvWave = half2(_WaveX *  _MainTex_ST.x, _WaveY *  _MainTex_ST.y) - i.uv;//å¾—åˆ°ä¸€ä¸ªç›¸å¯¹äºå½“å‰åƒç´ ä½ç½®çš„æ³¢æµªå‘é‡
+                uvWave.x *= _ScreenParams.x / _ScreenParams.y;//è¿™é‡Œä¹˜ä»¥äº†ä¸€ä¸ªå±å¹•å®½é«˜æ¯”çš„å› å­ï¼Œç›®çš„æ˜¯åœ¨éæ–¹å½¢å±å¹•ä¸Šä¿æŒæ³¢æµªçš„æ¯”ä¾‹
             	float waveTime = _Time.y;
-                //Ê¹ÓÃ sqrt(dot(uvWave, uvWave)) ¿ÉÒÔµÃµ½ÏòÁ¿µÄ³¤¶È£¬¼´ÏòÁ¿µÄÄ£
-                //ÎÒÃÇ½«²¨ÀËµÄÇ¿¶È²ÎÊı_WaveAmount³ËÒÔ²¨ÀËµÄ³¤¶È£¬ÒÔµ÷Õû²¨ÀËµÄÕûÌåÇ¿¶È
-                //½ÓÏÂÀ´£¬ÎÒÃÇ´Ó²¨ÀËµÄÇ¿¶ÈÖĞ¼õÈ¥ÁËÒ»¸ö»ùÓÚÊ±¼äµÄÒòËØ
-				float angWave = (sqrt(dot(uvWave, uvWave)) * _WaveAmount) - ((waveTime *  _WaveSpeed));//¼ÆËã²¨ÀËµÄ½Ç¶È
-                //ÕâÒ»ĞĞ´úÂë½«µ±Ç°ÏñËØµÄÎÆÀí×ø±êi.uvÆ«ÒÆÁËÒ»¶¨µÄÁ¿£¬Æ«ÒÆÁ¿ÓÉ²¨ÀËÏòÁ¿uvWave¡¢½Ç¶ÈangWaveºÍ²¨ÀËÇ¿¶È_WaveStrength¾ö¶¨
-				i.uv = i.uv + uvWave * sin(angWave) * (_WaveStrength / 1000.0);//Ê¹ÓÃÕıÏÒº¯ÊıÀ´´´½¨²¨ÀËĞ§¹û
-                fixed4 col = tex2D(_MainTex, i.uv);//²ÉÑù
+                //ä½¿ç”¨ sqrt(dot(uvWave, uvWave)) å¯ä»¥å¾—åˆ°å‘é‡çš„é•¿åº¦ï¼Œå³å‘é‡çš„æ¨¡
+                //æˆ‘ä»¬å°†æ³¢æµªçš„å¼ºåº¦å‚æ•°_WaveAmountä¹˜ä»¥æ³¢æµªçš„é•¿åº¦ï¼Œä»¥è°ƒæ•´æ³¢æµªçš„æ•´ä½“å¼ºåº¦
+                //æ¥ä¸‹æ¥ï¼Œæˆ‘ä»¬ä»æ³¢æµªçš„å¼ºåº¦ä¸­å‡å»äº†ä¸€ä¸ªåŸºäºæ—¶é—´çš„å› ç´ 
+				float angWave = (sqrt(dot(uvWave, uvWave)) * _WaveAmount) - ((waveTime *  _WaveSpeed));//è®¡ç®—æ³¢æµªçš„è§’åº¦
+                //è¿™ä¸€è¡Œä»£ç å°†å½“å‰åƒç´ çš„çº¹ç†åæ ‡i.uvåç§»äº†ä¸€å®šçš„é‡ï¼Œåç§»é‡ç”±æ³¢æµªå‘é‡uvWaveã€è§’åº¦angWaveå’Œæ³¢æµªå¼ºåº¦_WaveStrengthå†³å®š
+				i.uv = i.uv + uvWave * sin(angWave) * (_WaveStrength / 1000.0);//ä½¿ç”¨æ­£å¼¦å‡½æ•°æ¥åˆ›å»ºæ³¢æµªæ•ˆæœ
+                fixed4 col = tex2D(_MainTex, i.uv);//é‡‡æ ·
 
                 return col;
             }

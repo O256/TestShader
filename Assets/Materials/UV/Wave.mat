@@ -9,6 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Wave
   m_Shader: {fileID: 4800000, guid: 34cf334c223ef4f489cadf460d7837bd, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -17,6 +19,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -39,9 +42,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _WaveAmount: 9
-    - _WaveSpeed: 12
-    - _WaveStrength: 18
+    - _WaveAmount: 6
+    - _WaveSpeed: 15.5
+    - _WaveStrength: 9.1
     - _WaveX: 0
     - _WaveY: 0.5
     m_Colors:

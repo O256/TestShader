@@ -1,9 +1,9 @@
 Shader "Hidden/HueShift" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _HsvShift ("Hue Shift", Range(0, 360)) = 180 //É«µ÷±ãÒË
-        _HsvSaturation ("Saturation", Range(0, 2)) = 1 //±¥ºÍ¶È
-        _HsvBright ("Brightness", Range(0, 2)) = 1 //ÁÁ¶È
+        _HsvShift ("Hue Shift", Range(0, 360)) = 180 //è‰²è°ƒä¾¿å®œ
+        _HsvSaturation ("Saturation", Range(0, 2)) = 1 //é¥±å’Œåº¦
+        _HsvBright ("Brightness", Range(0, 2)) = 1 //äº®åº¦
 
     }
     SubShader {
@@ -12,7 +12,7 @@ Shader "Hidden/HueShift" {
 
         Pass {
             CGPROGRAM
-            #pragma vertex vert
+            #pragma vertex vert 
             #pragma fragment frag
 
             #include "UnityCG.cginc"
@@ -40,10 +40,10 @@ Shader "Hidden/HueShift" {
             fixed4 frag(v2f i) : SV_Target {
                 fixed4 col = tex2D(_MainTex, i.uv);
 
-                half3 resultHsv = half3(col.rgb);//½«RGBÑÕÉ«×ª»»ÎªHSVÑÕÉ«¿Õ¼ä rgb·Ö±ğ´ú±íH£¨É«µ÷£©¡¢S£¨±¥ºÍ¶È£©ºÍV£¨Ã÷¶È£©
-				half cosHsv = _HsvBright * _HsvSaturation * cos(_HsvShift * 3.14159265 / 180);//¼ÆËãHSVµ÷ÕûµÄcos·ÖÁ¿
-				half sinHsv = _HsvBright * _HsvSaturation * sin(_HsvShift * 3.14159265 / 180);//¼ÆËãHSVµ÷ÕûµÄsin·ÖÁ¿
-                //½«Ô­Ê¼µÄH¡¢S¡¢V·ÖÁ¿ÓëcosineºÍsine·ÖÁ¿µÄÏßĞÔ×éºÏµÃµ½×éºÏºóµÄH£¨É«µ÷£©¡¢S£¨±¥ºÍ¶È£©ºÍV£¨Ã÷¶È£© ¿ÉÒÔÀí½âÎª¹Ì¶¨µÄËã·¨
+                half3 resultHsv = half3(col.rgb);//å°†RGBé¢œè‰²è½¬æ¢ä¸ºHSVé¢œè‰²ç©ºé—´ rgbåˆ†åˆ«ä»£è¡¨Hï¼ˆè‰²è°ƒï¼‰ã€Sï¼ˆé¥±å’Œåº¦ï¼‰å’ŒVï¼ˆæ˜åº¦ï¼‰
+				half cosHsv = _HsvBright * _HsvSaturation * cos(_HsvShift * 3.14159265 / 180);//è®¡ç®—HSVè°ƒæ•´çš„cosåˆ†é‡
+				half sinHsv = _HsvBright * _HsvSaturation * sin(_HsvShift * 3.14159265 / 180);//è®¡ç®—HSVè°ƒæ•´çš„sinåˆ†é‡
+                //å°†åŸå§‹çš„Hã€Sã€Våˆ†é‡ä¸cosineå’Œsineåˆ†é‡çš„çº¿æ€§ç»„åˆå¾—åˆ°ç»„åˆåçš„Hï¼ˆè‰²è°ƒï¼‰ã€Sï¼ˆé¥±å’Œåº¦ï¼‰å’ŒVï¼ˆæ˜åº¦ï¼‰ å¯ä»¥ç†è§£ä¸ºå›ºå®šçš„ç®—æ³•
 				resultHsv.x = (.299 * _HsvBright + .701 * cosHsv + .168 * sinHsv) * col.x
 					+ (.587 * _HsvBright - .587 * cosHsv + .330 * sinHsv) * col.y
 					+ (.114 * _HsvBright - .114 * cosHsv - .497 * sinHsv) * col.z;
@@ -53,7 +53,7 @@ Shader "Hidden/HueShift" {
 				resultHsv.z = (.299 * _HsvBright - .3 * cosHsv + 1.25 * sinHsv) * col.x
 					+ (.587 * _HsvBright - .588 * cosHsv - 1.05 * sinHsv) * col.y
 					+ (.114 * _HsvBright + .886 * cosHsv - .203 * sinHsv) * col.z;
-				col.rgb = resultHsv;//½«¼ÆËãµÃµ½µÄHSVÑÕÉ«¿Õ¼äµÄÖµÖØĞÂ×ª»»ÎªRGBÑÕÉ«¿Õ¼ä
+				col.rgb = resultHsv;//å°†è®¡ç®—å¾—åˆ°çš„HSVé¢œè‰²ç©ºé—´çš„å€¼é‡æ–°è½¬æ¢ä¸ºRGBé¢œè‰²ç©ºé—´
 
                 return col;
             }

@@ -2,14 +2,14 @@ Shader "Hidden/Outline" {
     Properties {
         [Space]
         _MainTex("Texture", 2D) = "white" { }
-        _OutlineColor ("OutlineColor", Color) = (1, 1, 1, 1) //Ãè±ßÑÕÉ«
-        _OutlineAlpha ("OutlineAlpha", Range(0, 1)) = 1 //Ãè±ßÍ¸Ã÷¶È
-        _OutlinePixelWidth ("OutlinePixelWidth", Int) = 1 //Ãè±ßÏñËØµã
+        _OutlineColor ("OutlineColor", Color) = (1, 1, 1, 1) //æè¾¹é¢œè‰²
+        _OutlineAlpha ("OutlineAlpha", Range(0, 1)) = 1 //æè¾¹é€æ˜åº¦
+        _OutlinePixelWidth ("OutlinePixelWidth", Int) = 1 //æè¾¹åƒç´ ç‚¹
 
-        _OutlineDistortTex ("OutlineDistortionTex", 2D) = "white" { }//Ãè±ßµÄ±äĞÎµÄÔëÉùÍ¼
-        _OutlineDistortAmount ("OutlineDistortionAmount", Range(0, 2)) = 0.5 //ÔëÉùÍ¼²¨¶¯µÄ´óĞ¡ÏµÊı
-        _OutlineDistortTexXSpeed ("OutlineDistortTexXSpeed", Range(-50, 50)) = 5 //ÔëÉùÍ¼²¨¶¯µÄXÖáËÙ¶È
-        _OutlineDistortTexYSpeed ("OutlineDistortTexYSpeed", Range(-50, 50)) = 5 //ÔëÉùÍ¼²¨¶¯µÄYÖáËÙ¶È
+        _OutlineDistortTex ("OutlineDistortionTex", 2D) = "white" { }//æè¾¹çš„å˜å½¢çš„å™ªå£°å›¾
+        _OutlineDistortAmount ("OutlineDistortionAmount", Range(0, 2)) = 0.5 //å™ªå£°å›¾æ³¢åŠ¨çš„å¤§å°ç³»æ•°
+        _OutlineDistortTexXSpeed ("OutlineDistortTexXSpeed", Range(-50, 50)) = 5 //å™ªå£°å›¾æ³¢åŠ¨çš„Xè½´é€Ÿåº¦
+        _OutlineDistortTexYSpeed ("OutlineDistortTexYSpeed", Range(-50, 50)) = 5 //å™ªå£°å›¾æ³¢åŠ¨çš„Yè½´é€Ÿåº¦
     }
     SubShader {
         Tags { "Queue" = "Transparent" }
@@ -23,7 +23,7 @@ Shader "Hidden/Outline" {
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
-            float4 _MainTex_TexelSize;//_MainTexÎÆÀíµÄÃ¿¸öÏñËØµÄ³ß´ç
+            float4 _MainTex_TexelSize;//_MainTexçº¹ç†çš„æ¯ä¸ªåƒç´ çš„å°ºå¯¸
 
             fixed4 _OutlineColor;
             float _OutlineAlpha;
@@ -47,7 +47,7 @@ Shader "Hidden/Outline" {
             v2f vert(appdata v) {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uvOutDistTex = TRANSFORM_TEX(v.uv, _OutlineDistortTex);//µÃµ½_OutlineDistortTex¿Õ¼äÏÂµÄuv×ø±ê
+                o.uvOutDistTex = TRANSFORM_TEX(v.uv, _OutlineDistortTex);//å¾—åˆ°_OutlineDistortTexç©ºé—´ä¸‹çš„uvåæ ‡
                 o.uv = v.uv;
                 return o;
             }
@@ -56,20 +56,20 @@ Shader "Hidden/Outline" {
 
             fixed4 frag(v2f i) : SV_Target {
                 //------Outline------
-                fixed4 col = tex2D(_MainTex, i.uv);//¶ÔÖ÷ÎÆÀí½øĞĞ²ÉÑù
-                float originalAlpha = col.a;//Ô­Ê¼µÄalphaÖµ
+                fixed4 col = tex2D(_MainTex, i.uv);//å¯¹ä¸»çº¹ç†è¿›è¡Œé‡‡æ ·
+                float originalAlpha = col.a;//åŸå§‹çš„alphaå€¼
 
-                float2 destUv = float2(_OutlinePixelWidth * _MainTex_TexelSize.x, _OutlinePixelWidth * _MainTex_TexelSize.y);//µÃµ½Ãè±ß¿Õ¼äµÄÏñËØ´óĞ¡
+                float2 destUv = float2(_OutlinePixelWidth * _MainTex_TexelSize.x, _OutlinePixelWidth * _MainTex_TexelSize.y);//å¾—åˆ°æè¾¹ç©ºé—´çš„åƒç´ å¤§å°
 
-                i.uvOutDistTex.x += (_Time * _OutlineDistortTexXSpeed) % 1;//½«ÔëÉùÎÆÀíÍ¼ºÍÊ±¼ä³É±ÈÀı½øĞĞÒÆ¶¯
+                i.uvOutDistTex.x += (_Time * _OutlineDistortTexXSpeed) % 1;//å°†å™ªå£°çº¹ç†å›¾å’Œæ—¶é—´æˆæ¯”ä¾‹è¿›è¡Œç§»åŠ¨
                 i.uvOutDistTex.y += (_Time * _OutlineDistortTexYSpeed) % 1;
 
-                //Í¨¹ı²ÉÑùÔëÉùÍ¼µÄrÖµÀ´µÃµ½±äĞÎµÄ´óĞ¡²ÎÊı
+                //é€šè¿‡é‡‡æ ·å™ªå£°å›¾çš„rå€¼æ¥å¾—åˆ°å˜å½¢çš„å¤§å°å‚æ•°
                 float outDistortAmnt = (tex2D(_OutlineDistortTex, i.uvOutDistTex).r - 0.5) * 0.2 * _OutlineDistortAmount;
-                destUv.x += outDistortAmnt;//Ãè±ß¿Õ¼äµÄxy¼ÓÉÏÕâ¸ö±äĞÎµÄ²ÎÊı£¬Ê¹Ãè±ß±äĞÎ
+                destUv.x += outDistortAmnt;//æè¾¹ç©ºé—´çš„xyåŠ ä¸Šè¿™ä¸ªå˜å½¢çš„å‚æ•°ï¼Œä½¿æè¾¹å˜å½¢
                 destUv.y += outDistortAmnt;
 
-                //µÃµ½°Ë¸ö·½ÏòµÄÍâÃè±ßµÄ±ß½çÖµµÄalphaÖµ ÒòÎªÊÇÍâÃè±ßËùÒÔÒª¼ÓÉÏdestUv×é³ÉµÄfloat2Öµ
+                //å¾—åˆ°å…«ä¸ªæ–¹å‘çš„å¤–æè¾¹çš„è¾¹ç•Œå€¼çš„alphaå€¼ å› ä¸ºæ˜¯å¤–æè¾¹æ‰€ä»¥è¦åŠ ä¸ŠdestUvç»„æˆçš„float2å€¼
                 float spriteLeft = tex2D(_MainTex, i.uv + float2(destUv.x, 0)).a;
                 float spriteRight = tex2D(_MainTex, i.uv - float2(destUv.x, 0)).a;
                 float spriteBottom = tex2D(_MainTex, i.uv + float2(0, destUv.y)).a;
@@ -80,11 +80,11 @@ Shader "Hidden/Outline" {
                 float spriteBotRight = tex2D(_MainTex, i.uv + float2(-destUv.x, -destUv.y)).a;
                 float result = spriteLeft + spriteRight + spriteBottom + spriteTop + spriteTopLeft + spriteTopRight + spriteBotLeft + spriteBotRight;
 
-                result = step(0.05, saturate(result));//Èç¹û×îºóµÄ½á¹ûalphaÖµ´óÓÚ0.05£¬ÔòÎª1£¬·ñÔò¾ÍÊÇ0£¨Ò²¾ÍÊÇ±ß½çÅĞ¶¨£©
-                result *= (1 - originalAlpha) * _OutlineAlpha;//¿ØÖÆÃè±ßµÄalphaÖµ
+                result = step(0.05, saturate(result));//å¦‚æœæœ€åçš„ç»“æœalphaå€¼å¤§äº0.05ï¼Œåˆ™ä¸º1ï¼Œå¦åˆ™å°±æ˜¯0ï¼ˆä¹Ÿå°±æ˜¯è¾¹ç•Œåˆ¤å®šï¼‰
+                result *= (1 - originalAlpha) * _OutlineAlpha;//æ§åˆ¶æè¾¹çš„alphaå€¼
 
-                fixed4 outline = _OutlineColor;//Ãè±ßµÄÑÕÉ«
-                col = lerp(col, outline, result);//²åÖµ²ÉÑùµÃµ½×îºóµÄÑÕÉ«
+                fixed4 outline = _OutlineColor;//æè¾¹çš„é¢œè‰²
+                col = lerp(col, outline, result);//æ’å€¼é‡‡æ ·å¾—åˆ°æœ€åçš„é¢œè‰²
 
                 //------Rotate------
 

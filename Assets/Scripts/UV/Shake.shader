@@ -1,9 +1,9 @@
 Shader "Hidden/Shake" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _ShakeUvSpeed ("Shake Speed", Range(0, 20)) = 2.5 //¶¶¶¯ËÙ¶È
-        _ShakeUvX ("X Multiplier", Range(0, 5)) = 1.5 //xÖá¶¶¶¯·ù¶È
-        _ShakeUvY ("Y Multiplier", Range(0, 5)) = 1 //yÖá¶¶¶¯·ù¶È
+        _ShakeUvSpeed ("Shake Speed", Range(0, 20)) = 2.5 //æŠ–åŠ¨é€Ÿåº¦
+        _ShakeUvX ("X Multiplier", Range(0, 5)) = 1.5 //xè½´æŠ–åŠ¨å¹…åº¦
+        _ShakeUvY ("Y Multiplier", Range(0, 5)) = 1 //yè½´æŠ–åŠ¨å¹…åº¦
 
     }
     SubShader {
@@ -38,10 +38,10 @@ Shader "Hidden/Shake" {
             half _ShakeUvSpeed, _ShakeUvX, _ShakeUvY;
 
             fixed4 frag(v2f i) : SV_Target {
-                half xShake = sin(_Time * _ShakeUvSpeed * 50) * _ShakeUvX;//¸ù¾İÊ±¼ä£¬ËÙ¶ÈºÍÕñ·ù¼ÆËãÁËÔÚx·½ÏòÉÏµÄÕñ¶¯Á¿¡£Ê¹ÓÃÕıÏÒº¯ÊıÀ´²úÉúÖÜÆÚĞÔµÄÕñ¶¯Ğ§¹û
-                half yShake = cos(_Time * _ShakeUvSpeed * 50) * _ShakeUvY;//¸ù¾İÊ±¼ä£¬ËÙ¶ÈºÍÕñ·ù¼ÆËãÁËÔÚy·½ÏòÉÏµÄÕñ¶¯Á¿¡£Ê¹ÓÃÓàÏÒº¯ÊıÀ´²úÉúÖÜÆÚĞÔµÄÕñ¶¯Ğ§¹û
-                i.uv += half2(xShake * 0.01, yShake * 0.01);//½«¼ÆËãµÃµ½µÄÕñ¶¯Á¿Ó¦ÓÃµ½µ±Ç°ÏñËØµÄÎÆÀí×ø±êÉÏ
-                fixed4 col = tex2D(_MainTex, i.uv);//²ÉÑù
+                half xShake = sin(_Time * _ShakeUvSpeed * 50) * _ShakeUvX;//æ ¹æ®æ—¶é—´ï¼Œé€Ÿåº¦å’ŒæŒ¯å¹…è®¡ç®—äº†åœ¨xæ–¹å‘ä¸Šçš„æŒ¯åŠ¨é‡ã€‚ä½¿ç”¨æ­£å¼¦å‡½æ•°æ¥äº§ç”Ÿå‘¨æœŸæ€§çš„æŒ¯åŠ¨æ•ˆæœ
+                half yShake = cos(_Time * _ShakeUvSpeed * 50) * _ShakeUvY;//æ ¹æ®æ—¶é—´ï¼Œé€Ÿåº¦å’ŒæŒ¯å¹…è®¡ç®—äº†åœ¨yæ–¹å‘ä¸Šçš„æŒ¯åŠ¨é‡ã€‚ä½¿ç”¨ä½™å¼¦å‡½æ•°æ¥äº§ç”Ÿå‘¨æœŸæ€§çš„æŒ¯åŠ¨æ•ˆæœ
+                i.uv += half2(xShake * 0.01, yShake * 0.01);//å°†è®¡ç®—å¾—åˆ°çš„æŒ¯åŠ¨é‡åº”ç”¨åˆ°å½“å‰åƒç´ çš„çº¹ç†åæ ‡ä¸Š
+                fixed4 col = tex2D(_MainTex, i.uv);//é‡‡æ ·
                 return col;
             }
             ENDCG

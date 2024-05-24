@@ -1,8 +1,8 @@
 Shader "Hidden/HandDrawn" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _HandDrawnAmount ("Hand Drawn Amount", Range(0, 20)) = 10 //ÊÖ»æµÄÆ«²îµÄÊıÖµ
-        _HandDrawnSpeed ("Hand Drawn Speed", Range(1, 15)) = 5 //ÊÖ»æ²¨¶¯µÄËÙ¶È
+        _HandDrawnAmount ("Hand Drawn Amount", Range(0, 20)) = 10 //æ‰‹ç»˜çš„åå·®çš„æ•°å€¼
+        _HandDrawnSpeed ("Hand Drawn Speed", Range(1, 15)) = 5 //æ‰‹ç»˜æ³¢åŠ¨çš„é€Ÿåº¦
 
     }
     SubShader {
@@ -38,11 +38,11 @@ Shader "Hidden/HandDrawn" {
 
             fixed4 frag(v2f i) : SV_Target {
                 half2 uvCopy = i.uv;
-                _HandDrawnSpeed = floor(_Time * 20 * _HandDrawnSpeed);//½«_HandDrawnSpeedÓëÊ±¼ä¹ØÁª ÒªÓÃfloor²ÅÓĞÒ»¶ÎÒ»¶ÎµÄ¸Ğ¾õ ²»È»¾ÍÊÇÁ¬Ğø²¨¶¯ÁË
-                uvCopy.x = sin((uvCopy.x * _HandDrawnAmount + _HandDrawnSpeed) * 4);//Ê¹ÓÃsinº¯ÊıÀ´¼ÆËã²ÉÑùÖÜÎ§µÄsinÇøÓòµÄÆ«²îÖµ
-                uvCopy.y = cos((uvCopy.y * _HandDrawnAmount + _HandDrawnSpeed) * 4);//Í¬Àí
-                i.uv = lerp(i.uv, i.uv + uvCopy, 0.0005 * _HandDrawnAmount);//½«Ô­Ê¼UV×ø±êÓë¾­¹ı´¦ÀíµÄUV×ø±ê½øĞĞ²åÖµ ÓÃĞ¡Êı³ËÎªÁË¾¡Á¿¿¿½ü0 Ì«´óÁË¾Í»áÂÖ»ØÒ»È¦²ÉÑùÁË
-                fixed4 col = tex2D(_MainTex, i.uv);//²ÉÑù
+                _HandDrawnSpeed = floor(_Time * 20 * _HandDrawnSpeed);//å°†_HandDrawnSpeedä¸æ—¶é—´å…³è” è¦ç”¨flooræ‰æœ‰ä¸€æ®µä¸€æ®µçš„æ„Ÿè§‰ ä¸ç„¶å°±æ˜¯è¿ç»­æ³¢åŠ¨äº†
+                uvCopy.x = sin((uvCopy.x * _HandDrawnAmount + _HandDrawnSpeed) * 4);//ä½¿ç”¨sinå‡½æ•°æ¥è®¡ç®—é‡‡æ ·å‘¨å›´çš„sinåŒºåŸŸçš„åå·®å€¼
+                uvCopy.y = cos((uvCopy.y * _HandDrawnAmount + _HandDrawnSpeed) * 4);//åŒç†
+                i.uv = lerp(i.uv, i.uv + uvCopy, 0.0005 * _HandDrawnAmount);//å°†åŸå§‹UVåæ ‡ä¸ç»è¿‡å¤„ç†çš„UVåæ ‡è¿›è¡Œæ’å€¼ ç”¨å°æ•°ä¹˜ä¸ºäº†å°½é‡é è¿‘0 å¤ªå¤§äº†å°±ä¼šè½®å›ä¸€åœˆé‡‡æ ·äº†
+                fixed4 col = tex2D(_MainTex, i.uv);//é‡‡æ ·
                 return col;
             }
             ENDCG

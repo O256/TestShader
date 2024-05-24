@@ -1,9 +1,9 @@
 Shader "Hidden/Shadow" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _ShadowX ("Shadow X Axis", Range(-0.5, 0.5)) = 0.1 //xÖáÆ«ÒÆÖµ
-        _ShadowY ("Shadow Y Axis", Range(-0.5, 0.5)) = -0.05 //yÖáÆ«ÒÆÖµ
-        _ShadowAlpha ("Shadow Alpha", Range(0, 1)) = 0.5 //Ó°×ÓalphaÖµ
+        _ShadowX ("Shadow X Axis", Range(-0.5, 0.5)) = 0.1 //xè½´åç§»å€¼
+        _ShadowY ("Shadow Y Axis", Range(-0.5, 0.5)) = -0.05 //yè½´åç§»å€¼
+        _ShadowAlpha ("Shadow Alpha", Range(0, 1)) = 0.5 //å½±å­alphaå€¼
 
     }
     SubShader {
@@ -38,11 +38,11 @@ Shader "Hidden/Shadow" {
                 return o;
             }
 
-            //Í¨¹ıµ÷ÕûÏñËØµÄalphaÖµ£¬Ê¹µÃ_MainTexÎÆÀíÉÏµÄÒ»²¿·ÖÇøÓò¿´ÆğÀ´¸ü¼Ó°µµ­
+            //é€šè¿‡è°ƒæ•´åƒç´ çš„alphaå€¼ï¼Œä½¿å¾—_MainTexçº¹ç†ä¸Šçš„ä¸€éƒ¨åˆ†åŒºåŸŸçœ‹èµ·æ¥æ›´åŠ æš—æ·¡
             fixed4 frag(v2f i) : SV_Target {
                 fixed4 col = tex2D(_MainTex, i.uv);
-                half shadowA = tex2D(_MainTex, i.uv + half2(_ShadowX, _ShadowY)).a;//ÓÃÆ«ÒÆ¹ıµÄuv½øĞĞ²ÉÑù ²¢ÇÒ¼ÇÂ¼alphaÖµ ¿ÉÒÔÀí½âÎªÓ°×ÓµÄalpha
-                col.a = max(shadowA * _ShadowAlpha, col.a);//ÉèÖÃÁËµ±Ç°ÏñËØµÄalphaÖµ È¡×î´óÖµÊÇÎªÁËÈ·±£ÒõÓ°µÄalphaÖµ²»»áµÍÓÚÆ¬ÔªÑÕÉ«µÄalphaÖµ¡£
+                half shadowA = tex2D(_MainTex, i.uv + half2(_ShadowX, _ShadowY)).a;//ç”¨åç§»è¿‡çš„uvè¿›è¡Œé‡‡æ · å¹¶ä¸”è®°å½•alphaå€¼ å¯ä»¥ç†è§£ä¸ºå½±å­çš„alpha
+                col.a = max(shadowA * _ShadowAlpha, col.a);//è®¾ç½®äº†å½“å‰åƒç´ çš„alphaå€¼ å–æœ€å¤§å€¼æ˜¯ä¸ºäº†ç¡®ä¿é˜´å½±çš„alphaå€¼ä¸ä¼šä½äºç‰‡å…ƒé¢œè‰²çš„alphaå€¼ã€‚
                 return col;
             }
             ENDCG

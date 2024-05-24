@@ -37,11 +37,11 @@ Shader "Hidden/Zoom" {
             half _ZoomUvAmount;
 
             fixed4 frag(v2f i) : SV_Target {
-                half2 centerTiled = half2(0.5, 0.5);//¶¨ÒåÁËÒ»¸ö°ë¾¶Îª0.5µÄÖĞĞÄµã
-                i.uv -= centerTiled;//½«ÎÆÀí×ø±êÆ½ÒÆµ½ÒÔÎÆÀíÖĞĞÄÎªÔ­µãµÄ×ø±êÏµÖĞ
-                i.uv = i.uv * _ZoomUvAmount;//¶ÔÎÆÀí×ø±ê½øĞĞËõ·Å²Ù×÷
-                i.uv += centerTiled;//½«Ëõ·ÅºóµÄÎÆÀí×ø±êÆ½ÒÆµ½Ô­À´µÄ×ø±êÏµÖĞĞÄ
-                fixed4 col = tex2D(_MainTex, i.uv);//²ÉÑù
+                half2 centerTiled = half2(0.5, 0.5);//å®šä¹‰äº†ä¸€ä¸ªåŠå¾„ä¸º0.5çš„ä¸­å¿ƒç‚¹
+                i.uv -= centerTiled;//å°†çº¹ç†åæ ‡å¹³ç§»åˆ°ä»¥çº¹ç†ä¸­å¿ƒä¸ºåŸç‚¹çš„åæ ‡ç³»ä¸­
+                i.uv = i.uv * _ZoomUvAmount;//å¯¹çº¹ç†åæ ‡è¿›è¡Œç¼©æ”¾æ“ä½œ
+                i.uv += centerTiled;//å°†ç¼©æ”¾åçš„çº¹ç†åæ ‡å¹³ç§»åˆ°åŸæ¥çš„åæ ‡ç³»ä¸­å¿ƒ
+                fixed4 col = tex2D(_MainTex, i.uv);//é‡‡æ ·
                 return col;
             }
             ENDCG

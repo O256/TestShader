@@ -29,11 +29,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _HologramBlend: 0.589
-    - _HologramMaxAlpha: 0.509
-    - _HologramMinAlpha: 0.157
-    - _HologramStripesAmount: 0.055
-    - _HologramStripesSpeed: 8.9
+    - _HologramBlend: 0.314
+    - _HologramMaxAlpha: 0.75
+    - _HologramMinAlpha: 0.365
+    - _HologramStripesAmount: 0.072
+    - _HologramStripesSpeed: 9.7
     - _HologramUnmodAmount: 0
     m_Colors:
     - _HologramStripeColor: {r: 0.49056602, g: 0.2998115, b: 0.27999285, a: 1}

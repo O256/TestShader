@@ -1,7 +1,7 @@
 Shader "Hidden/FishEye" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _FishEyeUvAmount ("Fish Eye Amount", Range(0, 0.5)) = 0.35 //ÓãÑÛ·Å´óÏµÊı
+        _FishEyeUvAmount ("Fish Eye Amount", Range(0, 0.5)) = 0.35 //é±¼çœ¼æ”¾å¤§ç³»æ•°
 
     }
     SubShader {
@@ -37,13 +37,13 @@ Shader "Hidden/FishEye" {
             }
 
             fixed4 frag(v2f i) : SV_Target {
-                half2 centerTiled = half2(0.5, 0.5);//¶¨ÒåÁËÒ»¸ö°ë¾¶Îª0.5µÄÖĞĞÄµã
-                half bind = length(centerTiled);//¼ÆËãÁËÖĞĞÄµãµ½Ô­µãµÄ¾àÀë£¬¼´ÖĞĞÄµãµÄÄ£³¤
-                half2 dF = i.uv - centerTiled;//¼ÆËãÁËUV×ø±êÓëÖĞĞÄµãµÄ²îÖµ£¬¼´UVÏà¶ÔÓÚÖĞĞÄµãµÄÆ«ÒÆÁ¿
-                half dFlen = length(dF);//¼ÆËãÁËÆ«ÒÆÁ¿µÄÄ£³¤£¬¼´ÊäÈëUVÏà¶ÔÓÚÖĞĞÄµãµÄ¾àÀë
-                half fishInt = (3.14159265359 / bind) * (_FishEyeUvAmount + 0.001);//¼ÆËãÁËÓãÑÛĞ§¹ûµÄÇ¿¶È
-                i.uv = centerTiled + (dF / (max(0.0001, dFlen))) * tan(dFlen * fishInt) * bind / tan(bind * fishInt);//½øĞĞÁËÓãÑÛĞ§¹ûµÄ¼ÆËã
-                fixed4 col = tex2D(_MainTex, i.uv);//²ÉÑù
+                half2 centerTiled = half2(0.5, 0.5);//å®šä¹‰äº†ä¸€ä¸ªåŠå¾„ä¸º0.5çš„ä¸­å¿ƒç‚¹
+                half bind = length(centerTiled);//è®¡ç®—äº†ä¸­å¿ƒç‚¹åˆ°åŸç‚¹çš„è·ç¦»ï¼Œå³ä¸­å¿ƒç‚¹çš„æ¨¡é•¿
+                half2 dF = i.uv - centerTiled;//è®¡ç®—äº†UVåæ ‡ä¸ä¸­å¿ƒç‚¹çš„å·®å€¼ï¼Œå³UVç›¸å¯¹äºä¸­å¿ƒç‚¹çš„åç§»é‡
+                half dFlen = length(dF);//è®¡ç®—äº†åç§»é‡çš„æ¨¡é•¿ï¼Œå³è¾“å…¥UVç›¸å¯¹äºä¸­å¿ƒç‚¹çš„è·ç¦»
+                half fishInt = (3.14159265359 / bind) * (_FishEyeUvAmount + 0.001);//è®¡ç®—äº†é±¼çœ¼æ•ˆæœçš„å¼ºåº¦
+                i.uv = centerTiled + (dF / (max(0.0001, dFlen))) * tan(dFlen * fishInt) * bind / tan(bind * fishInt);//è¿›è¡Œäº†é±¼çœ¼æ•ˆæœçš„è®¡ç®—
+                fixed4 col = tex2D(_MainTex, i.uv);//é‡‡æ ·
 
                 return col;
             }

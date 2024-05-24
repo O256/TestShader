@@ -1,10 +1,10 @@
 Shader "Hidden/InnerOutline" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _InnerOutlineColor ("InnerOutlineColor", Color) = (1, 0, 0, 1) //Ãè±ßÏßÌõÑÕÉ«
-        _InnerOutlineThickness ("OutlineThickness", Int) = 2 //Ãè±ßÏßÌõµÄÆ«²îÖµµÄÅĞ¶¨ÏñËØ´óĞ¡
-        _InnerOutlineAlpha ("InnerOutlineAlpha", Range(0, 1)) = 1 //Ãè±ßÏßÌõÍ¸Ã÷¶È
-        _InnerOutlineGlow ("InnerOutlineGlow", Range(1, 10)) = 4 //Ãè±ßÏßÌõ·¢¹â³Ì¶È
+        _InnerOutlineColor ("InnerOutlineColor", Color) = (1, 0, 0, 1) //æè¾¹çº¿æ¡é¢œè‰²
+        _InnerOutlineThickness ("OutlineThickness", Int) = 2 //æè¾¹çº¿æ¡çš„åå·®å€¼çš„åˆ¤å®šåƒç´ å¤§å°
+        _InnerOutlineAlpha ("InnerOutlineAlpha", Range(0, 1)) = 1 //æè¾¹çº¿æ¡é€æ˜åº¦
+        _InnerOutlineGlow ("InnerOutlineGlow", Range(1, 10)) = 4 //æè¾¹çº¿æ¡å‘å…‰ç¨‹åº¦
 
     }
     SubShader {
@@ -33,7 +33,7 @@ Shader "Hidden/InnerOutline" {
                 float4 vertex : SV_POSITION;
             };
 
-            //Õû¸öº¯ÊıµÄ×÷ÓÃ¾ÍÊÇ¸ù¾İ´«ÈëµÄÎÆÀí×ø±ê uv ºÍÆ«ÒÆÁ¿£¬ÔÚÎÆÀíÉÏ½øĞĞ²ÉÑù£¬»ñÈ¡¶ÔÓ¦Î»ÖÃµÄÏñËØÑÕÉ«¡£
+            //æ•´ä¸ªå‡½æ•°çš„ä½œç”¨å°±æ˜¯æ ¹æ®ä¼ å…¥çš„çº¹ç†åæ ‡ uv å’Œåç§»é‡ï¼Œåœ¨çº¹ç†ä¸Šè¿›è¡Œé‡‡æ ·ï¼Œè·å–å¯¹åº”ä½ç½®çš„åƒç´ é¢œè‰²ã€‚
             float3 GetPixel(in int offsetX, in int offsetY, half2 uv, sampler2D tex) {
                 return tex2D(tex, (uv + half2(offsetX * _MainTex_TexelSize.x, offsetY * _MainTex_TexelSize.y))).rgb;
             }
@@ -48,12 +48,12 @@ Shader "Hidden/InnerOutline" {
             fixed4 frag(v2f i) : SV_Target {
                 fixed4 col = tex2D(_MainTex, i.uv);
 
-                //¶ÔxºÍyÖá·Ö±ğÈ¡ÑùÆ«ÒÆÖµ »ñÈ¡ÄÚÂÖÀªµÄÁ½¸ö·½Ïò£¨Ë®Æ½ºÍ´¹Ö±·½Ïò£©ÉÏµÄÑÕÉ«²îÒìÖµ
+                //å¯¹xå’Œyè½´åˆ†åˆ«å–æ ·åç§»å€¼ è·å–å†…è½®å»“çš„ä¸¤ä¸ªæ–¹å‘ï¼ˆæ°´å¹³å’Œå‚ç›´æ–¹å‘ï¼‰ä¸Šçš„é¢œè‰²å·®å¼‚å€¼
                 float3 innerT = abs(GetPixel(0, _InnerOutlineThickness, i.uv, _MainTex) - GetPixel(0, -_InnerOutlineThickness, i.uv, _MainTex));
                 innerT += abs(GetPixel(_InnerOutlineThickness, 0, i.uv, _MainTex) - GetPixel(-_InnerOutlineThickness, 0, i.uv, _MainTex));
 
-                innerT = innerT * col.a * _InnerOutlineAlpha;//¿ØÖÆalphaÖµ
-                //¶ÔinnerTÈ¡Ä£³¤ÔÙ½øĞĞÑÕÉ«Ïà³Ë ÒòÎªinnerTÊÇµ±Ç°Æ¬ÔªÓëÏàÁÚÆ¬ÔªµÄÑÕÉ«²îÒìÖµ£¬ÒªÈ¡Ä£²ÅÄÜ±íÊ¾²îÒìµÄ´óĞ¡
+                innerT = innerT * col.a * _InnerOutlineAlpha;//æ§åˆ¶alphaå€¼
+                //å¯¹innerTå–æ¨¡é•¿å†è¿›è¡Œé¢œè‰²ç›¸ä¹˜ å› ä¸ºinnerTæ˜¯å½“å‰ç‰‡å…ƒä¸ç›¸é‚»ç‰‡å…ƒçš„é¢œè‰²å·®å¼‚å€¼ï¼Œè¦å–æ¨¡æ‰èƒ½è¡¨ç¤ºå·®å¼‚çš„å¤§å°
                 col.rgb += length(innerT) * _InnerOutlineColor.rgb * _InnerOutlineGlow;
 
                 return col;

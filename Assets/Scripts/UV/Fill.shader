@@ -41,15 +41,15 @@ Shader "Hidden/Fill" {
 
             fixed4 frag(v2f i) : SV_Target {
                 half2 tiledUv = half2(i.uv.x / _MainTex_ST.x, i.uv.y / _MainTex_ST.y);
-                //Í¨¹ı (1 - _ClipUvUp) ¼ÆËã³ö²Ã¼ôµÄ¶¥²¿Î»ÖÃ£¬È»ºóÓë tiledUv.y ±È½Ï£¬³¬³öÕâ¸ö·¶Î§µÄÎÆÀí½«±»²Ã¼ô
+                //é€šè¿‡ (1 - _ClipUvUp) è®¡ç®—å‡ºè£å‰ªçš„é¡¶éƒ¨ä½ç½®ï¼Œç„¶åä¸ tiledUv.y æ¯”è¾ƒï¼Œè¶…å‡ºè¿™ä¸ªèŒƒå›´çš„çº¹ç†å°†è¢«è£å‰ª
                 clip((1 - _ClipUvUp) - tiledUv.y);
-                //Ê¹ÓÃ _ClipUvDown ¿ØÖÆ²Ã¼ôµÄµ×²¿Î»ÖÃ
+                //ä½¿ç”¨ _ClipUvDown æ§åˆ¶è£å‰ªçš„åº•éƒ¨ä½ç½®
                 clip(tiledUv.y - _ClipUvDown);
-                //²Ã¼ôÁËÎÆÀíµÄÓÒ²¿·Ö£¬Ê¹ÓÃ _ClipUvRight ¿ØÖÆ²Ã¼ôµÄÓÒ²àÎ»ÖÃ
+                //è£å‰ªäº†çº¹ç†çš„å³éƒ¨åˆ†ï¼Œä½¿ç”¨ _ClipUvRight æ§åˆ¶è£å‰ªçš„å³ä¾§ä½ç½®
                 clip((1 - _ClipUvRight) - tiledUv.x);
-                //²Ã¼ôÁËÎÆÀíµÄ×ó²¿·Ö£¬Ê¹ÓÃ _ClipUvLeft ¿ØÖÆ²Ã¼ôµÄ×ó²àÎ»ÖÃ
+                //è£å‰ªäº†çº¹ç†çš„å·¦éƒ¨åˆ†ï¼Œä½¿ç”¨ _ClipUvLeft æ§åˆ¶è£å‰ªçš„å·¦ä¾§ä½ç½®
                 clip(tiledUv.x - _ClipUvLeft);
-                fixed4 col = tex2D(_MainTex, i.uv);//²ÉÑù
+                fixed4 col = tex2D(_MainTex, i.uv);//é‡‡æ ·
 
                 return col;
             }

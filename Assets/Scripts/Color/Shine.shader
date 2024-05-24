@@ -1,11 +1,11 @@
 Shader "Hidden/Shine" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _ShineColor ("Shine Color", Color) = (1, 1, 1, 1) //¹âÏßµÄÑÕÉ«
-        _ShineLocation ("Shine Location", Range(0, 1)) = 0.5 //¹âÏßµÄÎ»ÖÃ
-        _ShineRotate ("Rotate Angle(radians)", Range(0, 6.2831)) = 0 //2¦° 360¶È
-        _ShineWidth ("Shine Width", Range(0.05, 1)) = 0.1 //¹âÏß¿í¶È
-        _ShineGlow ("Shine Glow", Range(0, 100)) = 1 //¹âÏßÁÁ¶È
+        _ShineColor ("Shine Color", Color) = (1, 1, 1, 1) //å…‰çº¿çš„é¢œè‰²
+        _ShineLocation ("Shine Location", Range(0, 1)) = 0.5 //å…‰çº¿çš„ä½ç½®
+        _ShineRotate ("Rotate Angle(radians)", Range(0, 6.2831)) = 0 //2Î  360åº¦
+        _ShineWidth ("Shine Width", Range(0.05, 1)) = 0.1 //å…‰çº¿å®½åº¦
+        _ShineGlow ("Shine Glow", Range(0, 100)) = 1 //å…‰çº¿äº®åº¦
 
     }
     SubShader {
@@ -44,16 +44,16 @@ Shader "Hidden/Shine" {
                 fixed4 col = tex2D(_MainTex, i.uv);
                 
                 half2 uvShine = i.uv;
-				half cosAngle = cos(_ShineRotate);//·Ö±ğ¼ÆËã¹âÏßĞı×ª½Ç¶È_ShineRotateµÄÓàÏÒÖµ
-				half sinAngle = sin(_ShineRotate);//·Ö±ğ¼ÆËã¹âÏßĞı×ª½Ç¶È_ShineRotateµÄÕıÏÒÖµ
-				half2x2 rot = half2x2(cosAngle, -sinAngle, sinAngle, cosAngle);//´´½¨Ò»¸ö¶şÎ¬Ğı×ª¾ØÕórotÀ´Ğı×ªÎÆÀí×ø±ê
-				uvShine -= half2(0.5, 0.5);//½«ÎÆÀí×ø±ê½øĞĞÆ½ÒÆ£¬Ê¹ÆäÒÔÎÆÀíµÄÖĞĞÄÎªÔ­µã ÒªÈÃ(0.5,0.5)µÄµØ·½±ä³É(0,0)
-				uvShine = mul(rot, uvShine);//½«ÎÆÀí×ø±ê°´ÕÕĞı×ª¾ØÕórot½øĞĞĞı×ª
-				uvShine += half2(0.5, 0.5);//½«Ğı×ªºóµÄÎÆÀí×ø±ê»Ö¸´µ½Ô­À´µÄÎ»ÖÃ
-				half currentDistanceProjection = (uvShine.x + uvShine.y) / 2;//¼ÆËãµ±Ç°ÏñËØÔÚ¹âÏßÍ¶Ó°·½ÏòÉÏµÄ¾àÀëÍ¶Ó°
-				half whitePower = 1 - (abs(currentDistanceProjection - _ShineLocation) / _ShineWidth);//¼ÆËãµ±Ç°ÏñËØµÄÁÁ¶È£¬ÓÃÓÚÄ£Äâ¹âÏßµÄÇ¿¶È
+				half cosAngle = cos(_ShineRotate);//åˆ†åˆ«è®¡ç®—å…‰çº¿æ—‹è½¬è§’åº¦_ShineRotateçš„ä½™å¼¦å€¼
+				half sinAngle = sin(_ShineRotate);//åˆ†åˆ«è®¡ç®—å…‰çº¿æ—‹è½¬è§’åº¦_ShineRotateçš„æ­£å¼¦å€¼
+				half2x2 rot = half2x2(cosAngle, -sinAngle, sinAngle, cosAngle);//åˆ›å»ºä¸€ä¸ªäºŒç»´æ—‹è½¬çŸ©é˜µrotæ¥æ—‹è½¬çº¹ç†åæ ‡
+				uvShine -= half2(0.5, 0.5);//å°†çº¹ç†åæ ‡è¿›è¡Œå¹³ç§»ï¼Œä½¿å…¶ä»¥çº¹ç†çš„ä¸­å¿ƒä¸ºåŸç‚¹ è¦è®©(0.5,0.5)çš„åœ°æ–¹å˜æˆ(0,0)
+				uvShine = mul(rot, uvShine);//å°†çº¹ç†åæ ‡æŒ‰ç…§æ—‹è½¬çŸ©é˜µrotè¿›è¡Œæ—‹è½¬
+				uvShine += half2(0.5, 0.5);//å°†æ—‹è½¬åçš„çº¹ç†åæ ‡æ¢å¤åˆ°åŸæ¥çš„ä½ç½®
+				half currentDistanceProjection = (uvShine.x + uvShine.y) / 2;//è®¡ç®—å½“å‰åƒç´ åœ¨å…‰çº¿æŠ•å½±æ–¹å‘ä¸Šçš„è·ç¦»æŠ•å½±
+				half whitePower = 1 - (abs(currentDistanceProjection - _ShineLocation) / _ShineWidth);//è®¡ç®—å½“å‰åƒç´ çš„äº®åº¦ï¼Œç”¨äºæ¨¡æ‹Ÿå…‰çº¿çš„å¼ºåº¦
 				col.rgb +=  col.a * whitePower * _ShineGlow * max(sign(currentDistanceProjection - (_ShineLocation - _ShineWidth)), 0.0)
-				* max(sign((_ShineLocation + _ShineWidth) - currentDistanceProjection), 0.0) * _ShineColor;//¼ÆËã³ö×îÖÕµÄÑÕÉ«
+				* max(sign((_ShineLocation + _ShineWidth) - currentDistanceProjection), 0.0) * _ShineColor;//è®¡ç®—å‡ºæœ€ç»ˆçš„é¢œè‰²
 
                 return col;
             }

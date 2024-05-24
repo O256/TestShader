@@ -1,7 +1,7 @@
 Shader "Hidden/Pixel" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _PixelateSize ("Pixelate size", Range(4, 512)) = 32 //ÏñËØ´óĞ¡
+        _PixelateSize ("Pixelate size", Range(4, 512)) = 32 //åƒç´ å¤§å°
 
     }
     SubShader {
@@ -16,7 +16,7 @@ Shader "Hidden/Pixel" {
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
-            float _PixelateSize;//¼ÙÉè_PixelateSizeµÄÖµÎª2£¬ÒâÎ¶×ÅÃ¿¸öÎÆÀí×ø±ê»á±»·Å´óÁ½±¶
+            float _PixelateSize;//å‡è®¾_PixelateSizeçš„å€¼ä¸º2ï¼Œæ„å‘³ç€æ¯ä¸ªçº¹ç†åæ ‡ä¼šè¢«æ”¾å¤§ä¸¤å€
 
             struct appdata {
                 float4 vertex : POSITION;
@@ -39,11 +39,11 @@ Shader "Hidden/Pixel" {
             }
 
             fixed4 frag(v2f i) : SV_Target {
-                //½«µ±Ç°ÏñËØµÄÎÆÀí×ø±ê½øĞĞ·Å´ó Èç¹ûÔ­Ê¼µÄÎÆÀí×ø±êÊÇ(0.3, 0.7),¶ø _PixelateSizeÊÇ2£¬ÄÇÃ´·Å´óºóµÄÎÆÀí×ø±ê¾Í»á±ä³É(0.6, 1.4)¡£
-                //round()º¯Êı½«·Å´óºóµÄÎÆÀí×ø±êËÄÉáÎåÈëÈ¡Õû¡£Èç¹û·Å´óºóµÄÎÆÀí×ø±êÊÇ(0.6, 1.4)£¬ÄÇÃ´¾­¹ıÈ¡Õûºó¾Í»á±ä³É(1, 1)¡£ÔÙ´ÎËõĞ¡_PixelateSize Íê³ÉÏñËØ»¯
+                //å°†å½“å‰åƒç´ çš„çº¹ç†åæ ‡è¿›è¡Œæ”¾å¤§ å¦‚æœåŸå§‹çš„çº¹ç†åæ ‡æ˜¯(0.3, 0.7),è€Œ _PixelateSizeæ˜¯2ï¼Œé‚£ä¹ˆæ”¾å¤§åçš„çº¹ç†åæ ‡å°±ä¼šå˜æˆ(0.6, 1.4)ã€‚
+                //round()å‡½æ•°å°†æ”¾å¤§åçš„çº¹ç†åæ ‡å››èˆäº”å…¥å–æ•´ã€‚å¦‚æœæ”¾å¤§åçš„çº¹ç†åæ ‡æ˜¯(0.6, 1.4)ï¼Œé‚£ä¹ˆç»è¿‡å–æ•´åå°±ä¼šå˜æˆ(1, 1)ã€‚å†æ¬¡ç¼©å°_PixelateSize å®Œæˆåƒç´ åŒ–
                 i.uv = round(i.uv * _PixelateSize) / _PixelateSize;
-                fixed4 col = tex2D(_MainTex, i.uv) * i.color;//ÖØĞÂ²ÉÑù
-                clip(col.a - 0.51);//ÀàËÆdiscard ÔÚalphaĞ¡ÓÚ0.51µÄÊ±ºòÕâ¸öÏñËØ¸øÌŞ³ı
+                fixed4 col = tex2D(_MainTex, i.uv) * i.color;//é‡æ–°é‡‡æ ·
+                clip(col.a - 0.51);//ç±»ä¼¼discard åœ¨alphaå°äº0.51çš„æ—¶å€™è¿™ä¸ªåƒç´ ç»™å‰”é™¤
                 return col;
             }
             ENDCG

@@ -1,10 +1,10 @@
 Shader "Hidden/Distortion" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _DistortTex ("Distortion Texture", 2D) = "white" { }//Å¤ÇúµÄÔëÉùÍ¼
-        _DistortAmount ("Distortion Amount", Range(0, 2)) = 0.5 //Å¤ÇúµÄ³Ì¶È
-        _DistortTexXSpeed ("Scroll speed X", Range(-50, 50)) = 5 //xÖáËÙ¶È
-        _DistortTexYSpeed ("Scroll speed Y", Range(-50, 50)) = 5 //yÖáËÙ¶È
+        _DistortTex ("Distortion Texture", 2D) = "white" { }//æ‰­æ›²çš„å™ªå£°å›¾
+        _DistortAmount ("Distortion Amount", Range(0, 2)) = 0.5 //æ‰­æ›²çš„ç¨‹åº¦
+        _DistortTexXSpeed ("Scroll speed X", Range(-50, 50)) = 5 //xè½´é€Ÿåº¦
+        _DistortTexYSpeed ("Scroll speed Y", Range(-50, 50)) = 5 //yè½´é€Ÿåº¦
 
     }
     SubShader {
@@ -43,13 +43,13 @@ Shader "Hidden/Distortion" {
             }
 
             fixed4 frag(v2f i) : SV_Target {
-                i.uvDistTex.x += (_Time * _DistortTexXSpeed) % 1;//¸ù¾İÊ±¼ä¿ØÖÆÁË¶ÔÅ¤ÇúÎÆÀíµÄ²ÉÑùÎ»ÖÃ¡£Í¨¹ıÈ¡Ä£ÔËËã£¬È·±£ÁË²ÉÑùÎ»ÖÃÔÚ[0, 1]·¶Î§ÄÚ
-                i.uvDistTex.y += (_Time * _DistortTexYSpeed) % 1;//Í¬Àí
-                ////¸ù¾İ´ÓÔëÉùÍ¼ÖĞr½øĞĞÅ¤ÇúÇ¿¶ÈµÄ¼ÆËã -0.5ÊÇÒª½«[0,1]Ó³Éäµ½[-0.5, 0.5]
+                i.uvDistTex.x += (_Time * _DistortTexXSpeed) % 1;//æ ¹æ®æ—¶é—´æ§åˆ¶äº†å¯¹æ‰­æ›²çº¹ç†çš„é‡‡æ ·ä½ç½®ã€‚é€šè¿‡å–æ¨¡è¿ç®—ï¼Œç¡®ä¿äº†é‡‡æ ·ä½ç½®åœ¨[0, 1]èŒƒå›´å†…
+                i.uvDistTex.y += (_Time * _DistortTexYSpeed) % 1;//åŒç†
+                ////æ ¹æ®ä»å™ªå£°å›¾ä¸­rè¿›è¡Œæ‰­æ›²å¼ºåº¦çš„è®¡ç®— -0.5æ˜¯è¦å°†[0,1]æ˜ å°„åˆ°[-0.5, 0.5]
                 half distortAmnt = (tex2D(_DistortTex, i.uvDistTex).r - 0.5) * 0.2 * _DistortAmount;
-                i.uv.x += distortAmnt;//¸ù¾İ¼ÆËã³öµÄÅ¤ÇúÇ¿¶ÈÈÃi.uv½øĞĞÁËÆ«ÒÆ
-                i.uv.y += distortAmnt;//Í¬Àí
-                fixed4 col = tex2D(_MainTex, i.uv);//²ÉÑù
+                i.uv.x += distortAmnt;//æ ¹æ®è®¡ç®—å‡ºçš„æ‰­æ›²å¼ºåº¦è®©i.uvè¿›è¡Œäº†åç§»
+                i.uv.y += distortAmnt;//åŒç†
+                fixed4 col = tex2D(_MainTex, i.uv);//é‡‡æ ·
 
                 return col;
             }

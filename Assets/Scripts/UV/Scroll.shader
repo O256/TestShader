@@ -1,8 +1,8 @@
 Shader "Hidden/Scroll" {
     Properties {
         _MainTex ("Texture", 2D) = "white" { }
-        _TextureScrollXSpeed ("Speed X Axis", Range(-5, 5)) = 1 //¹ö¶¯XÖáËÙ¶È
-        _TextureScrollYSpeed ("Speed Y Axis", Range(-5, 5)) = 0 //¹ö¶¯YÖáËÙ¶È
+        _TextureScrollXSpeed ("Speed X Axis", Range(-5, 5)) = 1 //æ»šåŠ¨Xè½´é€Ÿåº¦
+        _TextureScrollYSpeed ("Speed Y Axis", Range(-5, 5)) = 0 //æ»šåŠ¨Yè½´é€Ÿåº¦
 
     }
     SubShader {
@@ -37,10 +37,10 @@ Shader "Hidden/Scroll" {
             half _TextureScrollXSpeed, _TextureScrollYSpeed;
 
             fixed4 frag(v2f i) : SV_Target {
-                //Ê±¼äµÄ±ä»¯»áÓ°ÏìÆ«ÒÆÁ¿µÄ¼ÆËã£¬´Ó¶øÊµÏÖÁËÎÆÀí¹ö¶¯µÄĞ§¹û
-                i.uv.x += (_Time.y * _TextureScrollXSpeed) % 1;//¸ù¾İÊ±¼äºÍ_TextureScrollXSpeed¼ÆËãÁËÔÚx·½ÏòÉÏµÄÆ«ÒÆÁ¿
-                i.uv.y += (_Time.y * _TextureScrollYSpeed) % 1;//¸ù¾İÊ±¼äºÍ_TextureScrollYSpeed¼ÆËãÁËÔÚy·½ÏòÉÏµÄÆ«ÒÆÁ¿
-                fixed4 col = tex2D(_MainTex, i.uv);//²ÉÑù
+                //æ—¶é—´çš„å˜åŒ–ä¼šå½±å“åç§»é‡çš„è®¡ç®—ï¼Œä»è€Œå®ç°äº†çº¹ç†æ»šåŠ¨çš„æ•ˆæœ
+                i.uv.x += (_Time.y * _TextureScrollXSpeed) % 1;//æ ¹æ®æ—¶é—´å’Œ_TextureScrollXSpeedè®¡ç®—äº†åœ¨xæ–¹å‘ä¸Šçš„åç§»é‡
+                i.uv.y += (_Time.y * _TextureScrollYSpeed) % 1;//æ ¹æ®æ—¶é—´å’Œ_TextureScrollYSpeedè®¡ç®—äº†åœ¨yæ–¹å‘ä¸Šçš„åç§»é‡
+                fixed4 col = tex2D(_MainTex, i.uv);//é‡‡æ ·
                 return col;
             }
             ENDCG
